@@ -12,7 +12,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 
 import { Copyright } from './App';
 
@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '56.25%', // 16:9
   },
   cardContent: {
+    flexGrow: 1,
+  },
+  title: {
     flexGrow: 1,
   },
   footer: {
@@ -84,9 +87,14 @@ export default function Home() {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            X/Y Raffle
+          <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+            X/Y RAFFLE
           </Typography>
+          <Link to="/create">
+            <Button variant="contained">
+                Create Raffle
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
       <main>
