@@ -1,4 +1,6 @@
 import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -78,6 +80,14 @@ export default function CreateRaffle() {
     };
 
   return (
+    <React.Fragment>
+    <AppBar position="relative">
+    <Toolbar>
+        <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+        X/Y RAFFLE
+        </Typography>
+    </Toolbar>
+    </AppBar>
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -181,5 +191,6 @@ export default function CreateRaffle() {
         <Copyright />
       </Box>
     </Container>
+    </React.Fragment>
   );
 }

@@ -18,6 +18,7 @@ import {
 } from "react-router-dom";
 
 import Home from './home';
+import Raffle from './raffle';
 import CreateRaffle from './createRaffle';
 
 export function Copyright() {
@@ -51,9 +52,4 @@ export default function App() {
       </div>
     </Router>
   );
-}
-
-function Raffle() {
-    let { id } = useParams();
-    return <h3>Requested topic ID: {id}</h3>;
 }

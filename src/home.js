@@ -81,6 +81,16 @@ export default function Home() {
             deadline: 2000
         }
     ]);
+    /* Get list of raffles from back-end */
+    /*
+    React.useEffect(() => {
+        axios.get(`https://jsonplaceholder.typicode.com/users`)
+        .then(res => {
+        const persons = res.data;
+        setRaffles(persons)
+        })
+    }, []);
+    */
 
   return (
     <React.Fragment>
@@ -98,17 +108,17 @@ export default function Home() {
         </Toolbar>
       </AppBar>
       <main>
-        <Container className={classes.cardGrid} maxWidth="md">
+        <Container className={classes.cardGrid} maxWidth="lg">
           {/* End hero unit */}
           <Grid container spacing={4}>
             {raffles.map((raffle, ind) => (
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography gutterBottom variant="h5" color="primary" component="h2">
                       {raffle.name}
                     </Typography>
-                    <Typography align="center">
+                    <Typography>
                       {raffle.description}
                     </Typography>
                     <Typography color="textSecondary">
