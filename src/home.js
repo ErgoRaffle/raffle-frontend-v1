@@ -81,6 +81,7 @@ export default function Home() {
             deadline: 2000
         }
     ]);
+  
     /* Get list of raffles from back-end */
     /*
     React.useEffect(() => {

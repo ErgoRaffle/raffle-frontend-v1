@@ -19,6 +19,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import { Copyright } from './App';
+import Popup from './popup';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -30,10 +31,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -47,9 +44,15 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateRaffle() {
     const classes = useStyles();
     const [formValues, setValues] = React.useState({})
+    const [popup, setPopup] = React.useState({
+        deadline: 900,
+        erg: 23480000000,
+        address: "8UApt8czfFVuTgQmMwtsRBZ4nfWquNiSwCWUjMg"
+    })
     const [feedback, setFeedback] = React.useState(false);
-    
+    const [errorSnakbar, setErrorSnakbar] = React.useState(false);
     const [serviceShare, setServiceShare] = React.useState(10);
+    
     /* Get service share (Z) from back-end */
     /*
     React.useEffect(() => {
@@ -73,14 +76,28 @@ export default function CreateRaffle() {
         }))
     }
     
+    const handlePopup = (e) => {
+        let value = e.target.value
+        if (e.target.name == "Deadline" || e.target.name == "MinDonation")
+        {
+            value = Number(value)
+        }
+        setValues((prevState) => ({
+            ...prevState,
+            [e.target.name]: value
+        }))
+    }
+    
     const handleCreate = (e) => {
         e.preventDefault()
         axios.post(`https://back-endAddress/create`, formValues)
         .then(res => {
-        setFeedback(true);
+            const response = res.data;
+            setPopup(response)
+            setFeedback(true);
         })
         .catch(res => {
-            setFeedback(false);
+            setErrorSnakbar(true);
         })
     }
     
@@ -89,6 +106,13 @@ export default function CreateRaffle() {
             return;
         }
         setFeedback(false);
+    };
+    
+    const handleError = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setErrorSnakbar(false);
     };
 
   return (
@@ -214,11 +238,18 @@ export default function CreateRaffle() {
           >
             Create
           </Button>
-        <Snackbar open={feedback} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success">
-            This is a success message!
+          <Popup
+            deadline={popup.deadline}
+            erg={popup.erg}
+            address={popup.address}
+            open={feedback} 
+            onClose={handleClose}
+          />
+          <Snackbar open={errorSnakbar} autoHideDuration={6000} onClose={handleError}>
+            <Alert onClose={handleError} severity="error">
+            There was a problem connecting to the server!
             </Alert>
-        </Snackbar>
+          </Snackbar>
           <Link to="/">
             <Button fullWidth>
                 Back

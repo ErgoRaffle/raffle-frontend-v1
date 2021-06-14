@@ -14,6 +14,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,6 +23,12 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+
+import Popup from './popup';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -59,19 +67,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Raffle() {
     let { id } = useParams();
-    
     const classes = useStyles();
+    
     const [raffle, setRaffle] = React.useState(
         {
             id: "eb1189e20579a9cd7ba8a5760e3c99cb36ffc0727e8a6b4c2b262d3d4a41528b",
             name: "raffle_1",
             description: "hey this is raffle_1",
             deadline: 460123,
-            erg: 12000000,
+            erg: 12000000000,
             organizer_addr: "9hgtcPbEQnsWMLJ38ATR6ThQgGQpYQFKV1H866Lvcy8Je6bu1wn",
             charity_addr: "9hnWF5YPyjQtoTVs4ArWZmrm1azonBqqY1zk23R7Vqrn5wVtMmK",
-            min: 1000000
+            min: 1000000000
         });
+    
+    const [popup, setPopup] = React.useState({
+        deadline: 900,
+        erg: 23480000000,
+        address: "8UApt8czfFVuTgQmMwtsRBZ4nfWquNiSwCWUjMg"
+    })
+    
+    const [feedback, setFeedback] = React.useState(false);
+    const [errorSnakbar, setErrorSnakbar] = React.useState(false);
+    const [formValues, setValues] = React.useState({})
+    
     /* Get raffle data from back-end */
     /*
     React.useEffect(() => {
@@ -82,6 +101,45 @@ export default function Raffle() {
         })
     }, []);
     */
+    
+    const handleChange = (e) => {
+        let value = e.target.value
+        if (e.target.name == "erg")
+        {
+            value = Number(value)
+        }
+        setValues((prevState) => ({
+            ...prevState,
+            [e.target.name]: value
+        }))
+    }
+    
+    const handleDonate = (e) => {
+        e.preventDefault()
+        axios.post(`https://back-endAddress/donate`, formValues)
+        .then(res => {
+            const response = res.data;
+            setPopup(response)
+            setFeedback(true);
+        })
+        .catch(res => {
+            setErrorSnakbar(true);
+        })
+    }
+    
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setFeedback(false);
+    };
+    
+    const handleError = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setErrorSnakbar(false);
+    };
     
     return (
     <React.Fragment>
@@ -102,7 +160,7 @@ export default function Raffle() {
         <Container className={classes.cardGrid} maxWidth="lg">
           {/* End hero unit */}
           <Grid container spacing={4}>
-              <Grid item xs={12} md={7}>
+              <Grid item xs={12} md={8}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
@@ -114,7 +172,7 @@ export default function Raffle() {
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} md={5}>
+              <Grid item xs={12} md={4}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
@@ -179,37 +237,51 @@ export default function Raffle() {
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
                       Donate
                     </Typography>
-                    <Grid container spacing={4}>
-                        <Grid item xs={10}>
-                        <TextField
-                            fullWidth
-                            id="walletAddr"
-                            label="Your wallet address"
-                            name="walletAddr"
-                            autoComplete="wallet_addr"
-                            required
-                        />
+                    <form className={classes.form} onSubmit={handleDonate}>
+                        <Grid container spacing={4}>
+                            <Grid item xs={10}>
+                            <TextField
+                                fullWidth
+                                id="walletAddr"
+                                label="Your wallet address"
+                                name="walletAddr"
+                                autoComplete="wallet_addr"
+                                required
+                            />
+                            </Grid>
+                            <Grid item xs={10}>
+                            <TextField
+                                fullWidth
+                                id="erg"
+                                label="ERG"
+                                name="erg"
+                                autoComplete="value"
+                                required
+                            />
+                            </Grid>
+                            <Grid item xs={10}>
+                            <Button
+                                type="submit"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Donate
+                            </Button>
+                            <Popup
+                                deadline={popup.deadline}
+                                erg={popup.erg}
+                                address={popup.address}
+                                open={feedback} 
+                                onClose={handleClose}
+                            />
+                            <Snackbar open={errorSnakbar} autoHideDuration={6000} onClose={handleError}>
+                                <Alert onClose={handleError} severity="error">
+                                There was a problem connecting to the server!
+                                </Alert>
+                            </Snackbar>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={10}>
-                        <TextField
-                            fullWidth
-                            id="erg"
-                            label="ERG"
-                            name="erg"
-                            autoComplete="value"
-                            required
-                        />
-                        </Grid>
-                        <Grid item xs={10}>
-                        <Button
-                            type="submit"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Donate
-                        </Button>
-                        </Grid>
-                    </Grid>
+                    </form>
                   </CardContent>
                 </Card>
               </Grid>
