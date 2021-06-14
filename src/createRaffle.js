@@ -49,6 +49,18 @@ export default function CreateRaffle() {
     const [formValues, setValues] = React.useState({})
     const [feedback, setFeedback] = React.useState(false);
     
+    const [serviceShare, setServiceShare] = React.useState(10);
+    /* Get service share (Z) from back-end */
+    /*
+    React.useEffect(() => {
+        axios.get(`https://back-endAddress/share/z`)
+        .then(res => {
+        const response = res.data;
+        setServiceShare(response.z)
+        })
+    }, []);
+    */
+    
     const handleChange = (e) => {
         let value = e.target.value
         if (e.target.name == "Deadline" || e.target.name == "MinDonation")
@@ -63,7 +75,7 @@ export default function CreateRaffle() {
     
     const handleCreate = (e) => {
         e.preventDefault()
-        axios.post(`back-end post url`, formValues)
+        axios.post(`https://back-endAddress/create`, formValues)
         .then(res => {
         setFeedback(true);
         })
@@ -120,6 +132,17 @@ export default function CreateRaffle() {
                 multiline
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="charityAddr"
+                label="Charity Address"
+                name="charityAddr"
+                autoComplete="chr_addr"
+              />
+            </Grid>
             <Grid item xs={6}>
               <TextField
                 variant="outlined"
@@ -138,31 +161,47 @@ export default function CreateRaffle() {
                 fullWidth
                 name="minDonation"
                 label="MinDonation"
-                type="minDonation"
                 id="minDonation"
                 autoComplete="mind"
               />
             </Grid>
             <Grid item xs={12}>
+                <Typography color="primary">
+                Shares
+                </Typography>
+            </Grid>
+            <Grid item xs={4}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="organizerAddr"
-                label="Organizer Address"
-                name="organizerAddr"
-                autoComplete="org_addr"
+                id="charityShare"
+                label="Charity (X)"
+                name="charityShare"
+                autoComplete="cshare"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={4}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="charityAddr"
-                label="Charity Address"
-                name="charityAddr"
-                autoComplete="chr_addr"
+                name="winnerShare"
+                label="Winner (Y)"
+                id="winnerShare"
+                autoComplete="wshare"
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                name="serviceShare"
+                label="Service (Z)"
+                id="serviceShare"
+                autoComplete="sshare"
+                disabled
+                value={serviceShare}
               />
             </Grid>
           </Grid>

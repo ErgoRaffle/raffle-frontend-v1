@@ -63,7 +63,7 @@ export default function Raffle() {
     const classes = useStyles();
     const [raffle, setRaffle] = React.useState(
         {
-            id: 1,
+            id: "eb1189e20579a9cd7ba8a5760e3c99cb36ffc0727e8a6b4c2b262d3d4a41528b",
             name: "raffle_1",
             description: "hey this is raffle_1",
             deadline: 460123,
@@ -75,10 +75,10 @@ export default function Raffle() {
     /* Get raffle data from back-end */
     /*
     React.useEffect(() => {
-        axios.get(`https://jsonplaceholder.typicode.com/users`)
+        axios.get(`https://back-endAddress/raffles/:id`)
         .then(res => {
-        const persons = res.data;
-        setRaffles(persons)
+        const response = res.data;
+        setRaffles(response)
         })
     }, []);
     */
@@ -111,12 +111,6 @@ export default function Raffle() {
                     <Typography>
                       {raffle.description}
                     </Typography>
-                    <Typography color="textSecondary">
-                      id: {raffle.id}
-                    </Typography>
-                    <Typography color="textSecondary">
-                      deadline: {raffle.deadline}
-                    </Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -130,7 +124,7 @@ export default function Raffle() {
                         {raffle.erg / 1000000000} ERG
                     </Typography>
                     <Typography color="textSecondary">
-                      min donation: {raffle.min}
+                      minimum donation: {raffle.min / 1000000000} ERG
                     </Typography>
                   </CardContent>
                 </Card>
@@ -139,21 +133,21 @@ export default function Raffle() {
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
-                      Addresses
+                      Info
                     </Typography>
-                    <Grid container spacing={4}>
-                        <Grid item xs={10}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
                         <TextField
                             fullWidth
-                            id="organizerAddr"
-                            label="Organizer Address"
-                            name="organizerAddr"
-                            autoComplete="org_addr"
+                            id="raffleTokenId"
+                            label="Raffle ID"
+                            name="raffleTokenId"
+                            autoComplete="rid"
                             disabled
-                            value={raffle.organizer_addr}
+                            value={raffle.id}
                         />
                         </Grid>
-                        <Grid item xs={10}>
+                        <Grid item xs={12}>
                         <TextField
                             fullWidth
                             id="charityAddr"
@@ -162,6 +156,17 @@ export default function Raffle() {
                             autoComplete="chr_addr"
                             disabled
                             value={raffle.charity_addr}
+                        />
+                        </Grid>
+                        <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            id="deadline"
+                            label="Deadline"
+                            name="Deadline"
+                            autoComplete="deadline"
+                            disabled
+                            value={raffle.deadline}
                         />
                         </Grid>
                     </Grid>
@@ -182,6 +187,7 @@ export default function Raffle() {
                             label="Your wallet address"
                             name="walletAddr"
                             autoComplete="wallet_addr"
+                            required
                         />
                         </Grid>
                         <Grid item xs={10}>
@@ -191,6 +197,7 @@ export default function Raffle() {
                             label="ERG"
                             name="erg"
                             autoComplete="value"
+                            required
                         />
                         </Grid>
                         <Grid item xs={10}>

@@ -84,10 +84,10 @@ export default function Home() {
     /* Get list of raffles from back-end */
     /*
     React.useEffect(() => {
-        axios.get(`https://jsonplaceholder.typicode.com/users`)
+        axios.get(`https://back-endAddress/raffles`)
         .then(res => {
-        const persons = res.data;
-        setRaffles(persons)
+        const response = res.data;
+        setRaffles(response)
         })
     }, []);
     */
