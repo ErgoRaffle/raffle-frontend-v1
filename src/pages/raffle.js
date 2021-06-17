@@ -20,6 +20,7 @@ import {
 } from "react-router-dom";
 
 import Popup from '../components/popup';
+import Header from '../components/header';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -139,21 +140,10 @@ export default function Raffle() {
     return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <img
-            src={process.env.PUBLIC_URL + '/ergo-logo.png'} height={50} width={50}
-          />
-          <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-            X/Y RAFFLE
-          </Typography>
-          <Link to="/">
-            <Button variant="contained">
-                Home
-            </Button>
-          </Link>
-        </Toolbar>
-      </AppBar>
+      <Header 
+        buttonLink="/"
+        buttonText="Home"
+      />
       <main>
         <Container className={classes.cardGrid} maxWidth="lg">
           {/* End hero unit */}

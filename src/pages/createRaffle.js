@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 
 import { Copyright } from '../App';
 import Popup from '../components/popup';
+import Header from '../components/header';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -103,13 +104,10 @@ export default function CreateRaffle() {
 
   return (
     <React.Fragment>
-    <AppBar position="relative">
-    <Toolbar>
-        <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-        X/Y RAFFLE
-        </Typography>
-    </Toolbar>
-    </AppBar>
+      <Header 
+        buttonLink="/"
+        buttonText="Home"
+      />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
