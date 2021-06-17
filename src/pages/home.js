@@ -1,19 +1,16 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import ReportProblemRoundedIcon from '@material-ui/icons/ReportProblemRounded';
-import { Link } from 'react-router-dom';
 
 import { Copyright } from '../App';
 import Header from '../components/header';
+import RaffleCard from '../components/raffleCard';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -56,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-  const [raffles, setRaffles] = React.useState([/*
+  const [raffles, setRaffles] = React.useState([/**/
         {
             id: 1,
             name: "Raffle 1",
@@ -78,10 +75,10 @@ export default function Home() {
         {
             id: 4,
             name: "Raffle 4",
-            description: "hey, this is raffle_4. The 4th raffle. This should be a two line description",
+            description: "hey, this is raffle_4. The 4th raffle. This should be a two line description. Made a lot of effort to make this long.",
             deadline: 2000
         }
-    */]);
+    /**/]);
   
     /* Get list of raffles from back-end */
     /*
@@ -106,45 +103,23 @@ export default function Home() {
           {raffles && <Grid container spacing={4}>
             {raffles.map((raffle, ind) => (
               <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Card className={classes.card}>
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" color="primary" component="h2">
-                      {raffle.name}
-                    </Typography>
-                    <Typography>
-                      {raffle.description}
-                    </Typography>
-                    <Typography color="textSecondary">
-                      Deadline: {raffle.deadline}
-                    </Typography>
-                  </CardContent>
-                <CardActions>
-                  <Link to={`/raffle/${raffle.id}`}>
-                    <Button 
-                        type="submit"
-                        color="primary"
-                    >
-                        More info
-                    </Button>
-                  </Link>
-                </CardActions>
-                </Card>
+                <RaffleCard raffle={raffle} />
               </Grid>
             ))}
-          </Grid>
-        }
-        {!raffles.length && (
-        <Card variant="outlined">
-            <Box p={10}>
-                <Box align="center">
-                    <ReportProblemRoundedIcon className={classes.warningIcon}/>
+            </Grid>
+          }
+          {!raffles.length && (
+            <Card variant="outlined">
+                <Box p={10}>
+                    <Box align="center">
+                        <ReportProblemRoundedIcon className={classes.warningIcon}/>
+                    </Box>
+                    <Typography align="center" color="textSecondary">
+                        There are no raffle running
+                    </Typography>
                 </Box>
-                <Typography align="center" color="textSecondary">
-                    There are no raffle running
-                </Typography>
-            </Box>
-        </Card>
-        )}
+            </Card>
+          )}
         </Container>
       </main>
     </React.Fragment>

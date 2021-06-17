@@ -25,6 +25,7 @@ export default function Header(props) {
             src={process.env.PUBLIC_URL + '/logo_white.png'}
             height={45}
             width={45}
+            alt="Ergo logo"
           />
           <Typography variant="h6" color="inherit" noWrap className={classes.title}>
             ERGO RAFFLE

@@ -1,6 +1,4 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -247,10 +245,10 @@ export default function CreateRaffle() {
           </Link>
         </form>
       </div>
+    </Container>
       <Box mt={5}>
         <Copyright />
       </Box>
-    </Container>
     </React.Fragment>
   );
 }

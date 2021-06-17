@@ -7,17 +7,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import {
-  Link,
-  useParams
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import Popup from '../components/popup';
 import Header from '../components/header';
