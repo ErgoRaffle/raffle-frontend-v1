@@ -1,15 +1,11 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -18,8 +14,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-import { Copyright } from './App';
-import Popup from './popup';
+import { Copyright } from '../App';
+import Popup from '../components/popup';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -64,27 +60,17 @@ export default function CreateRaffle() {
     }, []);
     */
     
-    const handleChange = (e) => {
-        let value = e.target.value
-        if (e.target.name == "Deadline" || e.target.name == "MinDonation")
-        {
-            value = Number(value)
-        }
+    const handleChange_num = (e) => {
         setValues((prevState) => ({
             ...prevState,
-            [e.target.name]: value
+            [e.target.name]: Number(e.target.value)
         }))
     }
     
-    const handlePopup = (e) => {
-        let value = e.target.value
-        if (e.target.name == "Deadline" || e.target.name == "MinDonation")
-        {
-            value = Number(value)
-        }
+    const handleChange_str = (e) => {
         setValues((prevState) => ({
             ...prevState,
-            [e.target.name]: value
+            [e.target.name]: e.target.value
         }))
     }
     
@@ -142,7 +128,7 @@ export default function CreateRaffle() {
                 id="name"
                 label="Name"
                 autoFocus
-                onChange = {handleChange}
+                onChange = {handleChange_str}
               />
             </Grid>
             <Grid item xs={12}>
@@ -154,6 +140,7 @@ export default function CreateRaffle() {
                 name="description"
                 autoComplete="desc"
                 multiline
+                onChange = {handleChange_str}
               />
             </Grid>
             <Grid item xs={12}>
@@ -165,6 +152,7 @@ export default function CreateRaffle() {
                 label="Charity Address"
                 name="charityAddr"
                 autoComplete="chr_addr"
+                onChange = {handleChange_str}
               />
             </Grid>
             <Grid item xs={6}>
@@ -176,6 +164,7 @@ export default function CreateRaffle() {
                 label="Deadline"
                 name="deadline"
                 autoComplete="dline"
+                onChange = {handleChange_num}
               />
             </Grid>
             <Grid item xs={6}>
@@ -187,6 +176,7 @@ export default function CreateRaffle() {
                 label="MinDonation"
                 id="minDonation"
                 autoComplete="mind"
+                onChange = {handleChange_num}
               />
             </Grid>
             <Grid item xs={12}>
@@ -203,6 +193,7 @@ export default function CreateRaffle() {
                 label="Charity (X)"
                 name="charityShare"
                 autoComplete="cshare"
+                onChange = {handleChange_num}
               />
             </Grid>
             <Grid item xs={4}>
@@ -214,6 +205,7 @@ export default function CreateRaffle() {
                 label="Winner (Y)"
                 id="winnerShare"
                 autoComplete="wshare"
+                onChange = {handleChange_num}
               />
             </Grid>
             <Grid item xs={4}>
