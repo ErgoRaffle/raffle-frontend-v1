@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 
 import Popup from '../components/popup';
 import Header from '../components/header';
+import Footer from '../components/footer';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -273,5 +274,6 @@ export default function Raffle() {
           </Grid>
         </Container>
       </main>
+      <Footer />
     </React.Fragment>)
 }

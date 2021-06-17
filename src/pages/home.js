@@ -8,9 +8,9 @@ import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import ReportProblemRoundedIcon from '@material-ui/icons/ReportProblemRounded';
 
-import { Copyright } from '../App';
 import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
+import Footer from '../components/footer';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -122,6 +122,7 @@ export default function Home() {
           )}
         </Container>
       </main>
+      <Footer />
     </React.Fragment>
   );
 }

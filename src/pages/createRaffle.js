@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -12,9 +11,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-import { Copyright } from '../App';
 import Popup from '../components/popup';
 import Header from '../components/header';
+import Footer from '../components/footer';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -246,9 +245,7 @@ export default function CreateRaffle() {
         </form>
       </div>
     </Container>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+    <Footer />
     </React.Fragment>
   );
 }
