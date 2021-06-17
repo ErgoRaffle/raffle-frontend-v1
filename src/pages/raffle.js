@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -140,6 +141,9 @@ export default function Raffle() {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
+          <img
+            src={process.env.PUBLIC_URL + '/ergo-logo.png'} height={50} width={50}
+          />
           <Typography variant="h6" color="inherit" noWrap className={classes.title}>
             X/Y RAFFLE
           </Typography>
@@ -255,30 +259,30 @@ export default function Raffle() {
                                 onChange = {handleChange}
                             />
                             </Grid>
-                            <Grid item xs={10}>
-                            <Button
-                                type="submit"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Donate
-                            </Button>
-                            <Popup
-                                deadline={popup.deadline}
-                                erg={popup.erg}
-                                address={popup.address}
-                                open={feedback} 
-                                onClose={handleClose}
-                            />
-                            <Snackbar open={errorSnakbar} autoHideDuration={6000} onClose={handleError}>
-                                <Alert onClose={handleError} severity="error">
-                                There was a problem connecting to the server!
-                                </Alert>
-                            </Snackbar>
-                            </Grid>
                         </Grid>
                     </form>
                   </CardContent>
+                  <CardActions>
+                    <Button
+                        type="submit"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Donate
+                    </Button>
+                    <Popup
+                        deadline={popup.deadline}
+                        erg={popup.erg}
+                        address={popup.address}
+                        open={feedback} 
+                        onClose={handleClose}
+                    />
+                    <Snackbar open={errorSnakbar} autoHideDuration={6000} onClose={handleError}>
+                        <Alert onClose={handleError} severity="error">
+                        There was a problem connecting to the server!
+                        </Alert>
+                    </Snackbar>
+                  </CardActions>
                 </Card>
               </Grid>
           </Grid>
