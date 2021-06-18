@@ -29,7 +29,7 @@ export default function Header(props) {
     const classes = useStyles();
   
     return (
-      <Box p={4} className={classes.footer} variant="outlined">
+      <Box p={4} variant="outlined">
         <Copyright />
       </Box>
     )

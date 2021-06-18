@@ -13,41 +13,16 @@ import RaffleCard from '../components/raffleCard';
 import Footer from '../components/footer';
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
-  },
   warningIcon: {
       fontSize: 100,
       color: "rgba(0, 0, 0, 0.1)"
+  },
+  main: {
+      minHeight: "calc(100vh - 148px)"
   }
 }));
 
@@ -98,7 +73,7 @@ export default function Home() {
         buttonLink="/create"
         buttonText="Create Raffle"
       />
-      <main>
+      <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
           {raffles && <Grid container spacing={4}>
             {raffles.map((raffle, ind) => (

@@ -55,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  main: {
+      minHeight: "calc(100vh - 148px)"
+  }
 }));
 
 export default function Raffle() {
@@ -140,7 +143,7 @@ export default function Raffle() {
         buttonLink="/"
         buttonText="Home"
       />
-      <main>
+      <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
           {/* End hero unit */}
           <Grid container spacing={4}>

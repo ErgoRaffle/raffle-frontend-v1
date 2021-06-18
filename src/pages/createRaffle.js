@@ -10,6 +10,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 
 import Popup from '../components/popup';
 import Header from '../components/header';
@@ -21,7 +24,9 @@ function Alert(props) {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    padding: theme.spacing(8),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -33,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  main: {
+      minHeight: "calc(100vh - 148px)"
+  },
+  container: {
+      paddingTop: theme.spacing(8)
+  }
 }));
 
 export default function CreateRaffle() {
@@ -105,10 +116,13 @@ export default function CreateRaffle() {
         buttonLink="/"
         buttonText="Home"
       />
-    <Container component="main" maxWidth="xs">
+    <main className={classes.main}>
+    <Container component="main" maxWidth="sm" className={classes.container}>
       <CssBaseline />
+        <Card>
+            <CardContent>
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" color="primary">
           Create Raffle
         </Typography>
         <form className={classes.form} onSubmit={handleCreate}>
@@ -168,7 +182,7 @@ export default function CreateRaffle() {
                 required
                 fullWidth
                 name="minDonation"
-                label="MinDonation"
+                label="Minimum Donation"
                 id="minDonation"
                 autoComplete="mind"
                 onChange = {handleChange_num}
@@ -244,7 +258,10 @@ export default function CreateRaffle() {
           </Link>
         </form>
       </div>
+            </CardContent>
+        </Card>
     </Container>
+    </main>
     <Footer />
     </React.Fragment>
   );
