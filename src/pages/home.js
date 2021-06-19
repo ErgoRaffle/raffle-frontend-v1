@@ -11,6 +11,7 @@ import ReportProblemRoundedIcon from '@material-ui/icons/ReportProblemRounded';
 import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
 import Footer from '../components/footer';
+import { baseUrl } from '../config/server';
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -58,7 +59,7 @@ export default function Home() {
     /* Get list of raffles from back-end */
     /*
     React.useEffect(() => {
-        axios.get(`https://back-endAddress/raffles`)
+        axios.get(`${baseUrl}/raffles`)
         .then(res => {
         const response = res.data;
         setRaffles(response)

@@ -1,5 +1,4 @@
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 
@@ -16,18 +15,7 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  footer: {
-    position: "absolute",
-    left: 0,
-    bottom: 0,
-    right: 0,
-  }
-}));
-
-export default function Header(props) {
-    const classes = useStyles();
-  
+export default function Header(props) {  
     return (
       <Box p={4} variant="outlined">
         <Copyright />

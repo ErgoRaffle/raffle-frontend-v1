@@ -11,12 +11,12 @@ import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 
 import Popup from '../components/popup';
 import Header from '../components/header';
 import Footer from '../components/footer';
+import { baseUrl } from '../config/server';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -61,7 +61,7 @@ export default function CreateRaffle() {
     /* Get service share (Z) from back-end */
     /*
     React.useEffect(() => {
-        axios.get(`https://back-endAddress/share/z`)
+        axios.get(`${baseUrl}/share/z`)
         .then(res => {
         const response = res.data;
         setServiceShare(response.z)
@@ -85,7 +85,7 @@ export default function CreateRaffle() {
     
     const handleCreate = (e) => {
         e.preventDefault()
-        axios.post(`https://back-endAddress/create`, formValues)
+        axios.post(`${baseUrl}/raffles/add/`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)
@@ -190,7 +190,7 @@ export default function CreateRaffle() {
             </Grid>
             <Grid item xs={12}>
                 <Typography color="primary">
-                Shares
+                Shares (Percent)
                 </Typography>
             </Grid>
             <Grid item xs={4}>
@@ -199,7 +199,7 @@ export default function CreateRaffle() {
                 required
                 fullWidth
                 id="charityShare"
-                label="Charity (X)"
+                label="Charity"
                 name="charityShare"
                 autoComplete="cshare"
                 onChange = {handleChange_num}
@@ -211,7 +211,7 @@ export default function CreateRaffle() {
                 required
                 fullWidth
                 name="winnerShare"
-                label="Winner (Y)"
+                label="Winner"
                 id="winnerShare"
                 autoComplete="wshare"
                 onChange = {handleChange_num}
@@ -222,7 +222,7 @@ export default function CreateRaffle() {
                 variant="outlined"
                 fullWidth
                 name="serviceShare"
-                label="Service (Z)"
+                label="Service"
                 id="serviceShare"
                 autoComplete="sshare"
                 disabled

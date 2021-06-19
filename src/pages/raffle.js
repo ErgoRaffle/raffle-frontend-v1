@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import Popup from '../components/popup';
 import Header from '../components/header';
 import Footer from '../components/footer';
+import { baseUrl } from '../config/server';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -89,7 +90,7 @@ export default function Raffle() {
     /* Get raffle data from back-end */
     /*
     React.useEffect(() => {
-        axios.get(`https://back-endAddress/raffles/:id`)
+        axios.get(`${baseUrl}/raffles/byId/:id`)
         .then(res => {
         const response = res.data;
         setRaffle(response)
@@ -111,7 +112,7 @@ export default function Raffle() {
     
     const handleDonate = (e) => {
         e.preventDefault()
-        axios.post(`https://back-endAddress/donate`, formValues)
+        axios.post(`${baseUrl}/donate/`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)
