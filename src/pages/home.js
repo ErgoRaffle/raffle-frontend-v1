@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import ReportProblemRoundedIcon from '@material-ui/icons/ReportProblemRounded';
+import axios from 'axios';
 
 import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
@@ -29,43 +30,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-  const [raffles, setRaffles] = React.useState([/**/
-        {
-            id: "34ae4a6cce4993d82493ba540d89e041eec192160149318a5eb450b291f4b3fb",
-            name: "Raffle 1",
-            description: "hey, this is raffle_1.",
-            deadline: 515379
-        },
-        {
-            id: "f6d73fcedba13d2eb5a00fa84a82d6535f6555f78afe6a893224cadd9f25b25a",
-            name: "Raffle 2",
-            description: "hey, this is raffle_2.",
-            deadline: 515672
-        },
-        {
-            id: "61060e39d76778a9a68298a3b89d5eaf81364aa5a4b5ba43b60a034cbd237b52",
-            name: "untitled",
-            description: "no description found for this raffle.",
-            deadline: 516299
-        },
-        {
-            id: "c21f30ae1db3700e02c419dd7c83750c526279890ba2b42840c8ae513a3dd5d5",
-            name: "Raffle 4",
-            description: "hey, this is raffle_4. The 4th raffle. This should be a two line description. Made a lot of effort to make this long.",
-            deadline: 520091
-        }
-    /**/]);
+  const [raffles, setRaffles] = React.useState([]);
   
     /* Get list of raffles from back-end */
-    /*
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffles`)
+        axios.get(`${baseUrl}/raffle`)
         .then(res => {
-        const response = res.data;
-        setRaffles(response)
+            const response = res.data
+            if (response.code === 200)
+            {
+                setRaffles(response.items)
+            }
+            else
+            {
+                setRaffles([])
+            }
+        })
+        .catch(res => {
+            setRaffles([])
         })
     }, []);
-    */
+    
 
   return (
     <React.Fragment>
@@ -78,7 +63,7 @@ export default function Home() {
         <Container className={classes.cardGrid} maxWidth="lg">
           {raffles && <Grid container spacing={4}>
             {raffles.map((raffle, ind) => (
-              <Grid item xs={12} sm={6} md={4} lg={3}>
+              <Grid item key={ind} xs={12} sm={6} md={4} lg={3}>
                 <RaffleCard raffle={raffle} />
               </Grid>
             ))}
