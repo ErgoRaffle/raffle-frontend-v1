@@ -31,28 +31,28 @@ export default function Home() {
   const classes = useStyles();
   const [raffles, setRaffles] = React.useState([/**/
         {
-            id: 1,
+            id: "34ae4a6cce4993d82493ba540d89e041eec192160149318a5eb450b291f4b3fb",
             name: "Raffle 1",
             description: "hey, this is raffle_1.",
-            deadline: 1000
+            deadline: 515379
         },
         {
-            id: 2,
+            id: "f6d73fcedba13d2eb5a00fa84a82d6535f6555f78afe6a893224cadd9f25b25a",
             name: "Raffle 2",
             description: "hey, this is raffle_2.",
-            deadline: 2000
+            deadline: 515672
         },
         {
-            id: 3,
+            id: "61060e39d76778a9a68298a3b89d5eaf81364aa5a4b5ba43b60a034cbd237b52",
             name: "untitled",
             description: "no description found for this raffle.",
-            deadline: 2000
+            deadline: 516299
         },
         {
-            id: 4,
+            id: "c21f30ae1db3700e02c419dd7c83750c526279890ba2b42840c8ae513a3dd5d5",
             name: "Raffle 4",
             description: "hey, this is raffle_4. The 4th raffle. This should be a two line description. Made a lot of effort to make this long.",
-            deadline: 2000
+            deadline: 520091
         }
     /**/]);
   
