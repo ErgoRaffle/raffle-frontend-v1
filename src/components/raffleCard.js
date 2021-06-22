@@ -31,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function raffleIcon(raffleId) {
+    const id = parseInt(raffleId, 16)
+    return `/raffle_${id % 3}.svg`
+}
+
 export default function RaffleCard(props) {
     const classes = useStyles();
   
@@ -43,7 +48,7 @@ export default function RaffleCard(props) {
           </CardContent>
           <CardContent align="center">
             <img
-                src={process.env.PUBLIC_URL + '/raffle_1.svg'}
+                src={process.env.PUBLIC_URL + raffleIcon(props.raffle.id)}
                 height={200}
                 width={200}
                 alt="Raffle"
