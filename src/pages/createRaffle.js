@@ -49,25 +49,23 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateRaffle() {
     const classes = useStyles();
     const [formValues, setValues] = React.useState({})
-    const [popup, setPopup] = React.useState({
-        deadline: 900,
-        erg: 23480000000,
-        address: "8UApt8czfFVuTgQmMwtsRBZ4nfWquNiSwCWUjMg"
-    })
+    const [popup, setPopup] = React.useState({})
     const [feedback, setFeedback] = React.useState(false);
     const [errorSnakbar, setErrorSnakbar] = React.useState(false);
-    const [serviceShare, setServiceShare] = React.useState(10);
+    const [serviceShare, setServiceShare] = React.useState(-1);
     
     /* Get service share (Z) from back-end */
-    /*
     React.useEffect(() => {
-        axios.get(`${baseUrl}/share/z`)
+        axios.get(`${baseUrl}/raffle_share`)
         .then(res => {
-        const response = res.data;
-        setServiceShare(response.z)
+            const response = res.data;
+            setServiceShare(response.z)
+        })
+        .catch(res => {
+            setServiceShare(-1)
+            setErrorSnakbar(true);
         })
     }, []);
-    */
     
     const handleChange_num = (e) => {
         setValues((prevState) => ({
@@ -83,9 +81,10 @@ export default function CreateRaffle() {
         }))
     }
     
+    /* Request to create raffle */
     const handleCreate = (e) => {
         e.preventDefault()
-        axios.post(`${baseUrl}/raffles/add/`, formValues)
+        axios.post(`${baseUrl}/raffle/add`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)
