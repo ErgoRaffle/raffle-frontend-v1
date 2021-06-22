@@ -146,7 +146,6 @@ export default function CreateRaffle() {
                 id="description"
                 label="Description"
                 name="description"
-                autoComplete="desc"
                 multiline
                 onChange = {handleChange_str}
               />
@@ -159,7 +158,6 @@ export default function CreateRaffle() {
                 id="charityAddr"
                 label="Charity Address"
                 name="charityAddr"
-                autoComplete="chr_addr"
                 onChange = {handleChange_str}
               />
             </Grid>
@@ -171,7 +169,7 @@ export default function CreateRaffle() {
                 id="deadline"
                 label="Deadline"
                 name="deadline"
-                autoComplete="dline"
+                type="number"
                 onChange = {handleChange_num}
               />
             </Grid>
@@ -183,7 +181,7 @@ export default function CreateRaffle() {
                 name="minDonation"
                 label="Minimum Donation"
                 id="minDonation"
-                autoComplete="mind"
+                type="number"
                 onChange = {handleChange_num}
               />
             </Grid>
@@ -200,7 +198,7 @@ export default function CreateRaffle() {
                 id="charityShare"
                 label="Charity"
                 name="charityShare"
-                autoComplete="cshare"
+                type="number"
                 onChange = {handleChange_num}
               />
             </Grid>
@@ -212,7 +210,7 @@ export default function CreateRaffle() {
                 name="winnerShare"
                 label="Winner"
                 id="winnerShare"
-                autoComplete="wshare"
+                type="number"
                 onChange = {handleChange_num}
               />
             </Grid>
@@ -223,7 +221,6 @@ export default function CreateRaffle() {
                 name="serviceShare"
                 label="Service"
                 id="serviceShare"
-                autoComplete="sshare"
                 disabled
                 value={serviceShare}
               />

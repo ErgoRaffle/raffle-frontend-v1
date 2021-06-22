@@ -64,7 +64,7 @@ export default function Home() {
         <Container className={classes.cardGrid} maxWidth="lg">
           {raffles && <Grid container spacing={4}>
             {raffles.map((raffle, ind) => (
-              <Grid item key={ind} xs={12} sm={6} md={4} lg={3}>
+              <Grid item key={ind} xs={12} sm={6} md={4} lg={4}>
                 <RaffleCard raffle={raffle} />
               </Grid>
             ))}

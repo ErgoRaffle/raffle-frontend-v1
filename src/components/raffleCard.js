@@ -21,6 +21,11 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1,
   },
+  cardDeadline: {
+    padding: "8px",
+    borderTop: "1px solid #ddd",
+    borderBottom: "1px solid #ddd"
+  },
 }));
 
 export default function RaffleCard(props) {
@@ -35,6 +40,8 @@ export default function RaffleCard(props) {
             <Typography>
                 {props.raffle.description}
             </Typography>
+            </CardContent>
+            <CardContent align="center" className={classes.cardDeadline}>
             <Typography color="textSecondary">
                 Deadline: {props.raffle.deadline}
             </Typography>

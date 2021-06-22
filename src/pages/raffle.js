@@ -73,7 +73,7 @@ export default function Raffle() {
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffle/:id`)
+        axios.get(`${baseUrl}/raffle/${id}`)
         .then(res => {
             const response = res.data;
             setRaffle(response)
@@ -174,9 +174,8 @@ export default function Raffle() {
                             id="raffleTokenId"
                             label="Raffle ID"
                             name="raffleTokenId"
-                            autoComplete="rid"
-                            disabled
-                            value={raffle.id}
+                            readOnly
+                            value={raffle.id || ""}
                         />
                         </Grid>
                         <Grid item xs={12}>
@@ -185,9 +184,8 @@ export default function Raffle() {
                             id="charityAddr"
                             label="Charity Address"
                             name="charityAddr"
-                            autoComplete="chr_addr"
-                            disabled
-                            value={raffle.charity_addr}
+                            readOnly
+                            value={raffle.charity_addr || ""}
                         />
                         </Grid>
                         <Grid item xs={4}>
@@ -196,9 +194,8 @@ export default function Raffle() {
                             id="deadline"
                             label="Deadline"
                             name="Deadline"
-                            autoComplete="deadline"
-                            disabled
-                            value={raffle.deadline}
+                            readOnly
+                            value={raffle.deadline || ""}
                         />
                         </Grid>
                     </Grid>
@@ -219,7 +216,6 @@ export default function Raffle() {
                                 id="walletAddr"
                                 label="Your wallet address"
                                 name="walletAddr"
-                                autoComplete="wallet_addr"
                                 required
                                 onChange = {handleChange}
                             />
@@ -230,8 +226,8 @@ export default function Raffle() {
                                 id="erg"
                                 label="ERG"
                                 name="erg"
-                                autoComplete="value"
                                 required
+                                type="number"
                                 onChange = {handleChange}
                             />
                             </Grid>

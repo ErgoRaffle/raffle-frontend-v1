@@ -10,6 +10,16 @@ const useStyles = makeStyles((theme) => ({
   time: {
     fontSize: 32
   },
+  copyText: {
+      "&:hover": {
+        cursor: "pointer",
+        backgroundColor: "#efefef"
+      },
+      "&:active": {
+        boxShadow: "none",
+        backgroundColor: "#cccccc",
+      }
+  }
 }));
 
 const timerProps = {
@@ -30,7 +40,7 @@ export default function Popup(props) {
     >
     <DialogContent>
         <DialogContentText id="alert-dialog-description">
-        Click on the amount and the address to copy them!
+        <b>{'\u26A0'} Click on the amount and the address to copy them! </b>
         </DialogContentText>
     </DialogContent>
     <DialogContent align="center">
@@ -54,7 +64,17 @@ export default function Popup(props) {
     </DialogContent>
     <DialogContent>
         <DialogContentText id="alert-dialog-description">
-        Send exactly {props.erg / 1000000000} ERG to {props.address}; the operation will be done automatically afterward.
+        Send exactly 
+        <b
+            onClick={() => {navigator.clipboard.writeText(props.erg / 1000000000)}}
+            className={classes.copyText}
+        > {props.erg / 1000000000} </b>
+        ERG to 
+        <b
+            onClick={() => {navigator.clipboard.writeText(props.address)}}
+            className={classes.copyText}
+        > {props.address}</b>;
+        the operation will be done automatically afterward.
         </DialogContentText>
     </DialogContent>
     <DialogContent>
