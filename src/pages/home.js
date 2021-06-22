@@ -12,6 +12,7 @@ import axios from 'axios';
 import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
 import Footer from '../components/footer';
+import EmptyCard from '../components/emptyCard';
 import { baseUrl } from '../config/server';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,16 +71,9 @@ export default function Home() {
             </Grid>
           }
           {!raffles.length && (
-            <Card variant="outlined">
-                <Box p={10}>
-                    <Box align="center">
-                        <ReportProblemRoundedIcon className={classes.warningIcon}/>
-                    </Box>
-                    <Typography align="center" color="textSecondary">
-                        There are no raffle running
-                    </Typography>
-                </Box>
-            </Card>
+            <EmptyCard 
+                text="There are no raffle running"
+            />
           )}
         </Container>
       </main>
