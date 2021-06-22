@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     borderTop: "1px solid #ddd",
     borderBottom: "1px solid #ddd"
   },
+  cardTitle: {
+      paddingBottom: 0
+  }
 }));
 
 export default function RaffleCard(props) {
@@ -33,19 +36,29 @@ export default function RaffleCard(props) {
   
     return (
         <Card className={classes.card}>
-            <CardContent className={classes.cardContent}>
+          <CardContent className={classes.cardTitle}>
             <Typography gutterBottom variant="h5" color="primary" component="h2">
                 {props.raffle.name}
             </Typography>
+          </CardContent>
+          <CardContent align="center">
+            <img
+                src={process.env.PUBLIC_URL + '/raffle_1.svg'}
+                height={200}
+                width={200}
+                alt="Raffle"
+            />
+          </CardContent>
+          <CardContent className={classes.cardContent}>
             <Typography>
                 {props.raffle.description}
             </Typography>
-            </CardContent>
-            <CardContent align="center" className={classes.cardDeadline}>
+          </CardContent>
+          <CardContent align="center" className={classes.cardDeadline}>
             <Typography color="textSecondary">
                 Deadline: {props.raffle.deadline}
             </Typography>
-            </CardContent>
+          </CardContent>
           <CardActions>
             <Link to={`/raffle/${props.raffle.id}`}>
             <Button 
