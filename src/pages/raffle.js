@@ -69,7 +69,9 @@ export default function Raffle() {
     const [popup, setPopup] = React.useState({})
     const [feedback, setFeedback] = React.useState(false);
     const [errorSnakbar, setErrorSnakbar] = React.useState(false);
-    const [formValues, setValues] = React.useState({})
+    const [formValues, setValues] = React.useState({
+        "id": id
+    })
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
