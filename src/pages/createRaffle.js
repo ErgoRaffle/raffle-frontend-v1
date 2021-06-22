@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
       paddingTop: theme.spacing(8)
-  }
+  },
 }));
 
 export default function CreateRaffle() {
