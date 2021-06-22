@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import Popup from '../components/popup';
 import Header from '../components/header';
 import Footer from '../components/footer';
+import EmptyCard from '../components/emptyCard';
 import { baseUrl } from '../config/server';
 
 function Alert(props) {
@@ -66,6 +67,7 @@ export default function Raffle() {
     const classes = useStyles();
     
     const [raffle, setRaffle] = React.useState({});
+    const [raffleExist, setRaffleExist] = React.useState(false);
     const [popup, setPopup] = React.useState({})
     const [feedback, setFeedback] = React.useState(false);
     const [errorSnakbar, setErrorSnakbar] = React.useState(false);
@@ -78,10 +80,20 @@ export default function Raffle() {
         axios.get(`${baseUrl}/raffle/${id}`)
         .then(res => {
             const response = res.data;
-            setRaffle(response)
+            if (response.code === 200)
+            {
+                setRaffle(response)
+                setRaffleExist(true)
+            }
+            else
+            {
+                setRaffle({})
+                setRaffleExist(false)
+            }
         })
         .catch(res => {
             setRaffle({})
+            setRaffleExist(false)
         })
     }, [id]);
     
@@ -135,7 +147,7 @@ export default function Raffle() {
       />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
-          <Grid container spacing={4}>
+          {raffleExist && <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
@@ -261,6 +273,12 @@ export default function Raffle() {
                 </Card>
               </Grid>
           </Grid>
+        }
+        {!raffleExist && (
+            <EmptyCard 
+                text="There is no data about this raffle"
+            />
+        )}
         </Container>
       </main>
       <Footer />

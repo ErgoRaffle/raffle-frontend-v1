@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
       paddingBottom: 0
-  }
+  },
 }));
 
 export default function RaffleCard(props) {
