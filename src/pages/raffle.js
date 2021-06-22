@@ -65,44 +65,29 @@ export default function Raffle() {
     let { id } = useParams();
     const classes = useStyles();
     
-    const [raffle, setRaffle] = React.useState(
-        {
-            id: "eb1189e20579a9cd7ba8a5760e3c99cb36ffc0727e8a6b4c2b262d3d4a41528b",
-            name: "raffle_1",
-            description: "hey this is raffle_1",
-            deadline: 460123,
-            erg: 12000000000,
-            organizer_addr: "9hgtcPbEQnsWMLJ38ATR6ThQgGQpYQFKV1H866Lvcy8Je6bu1wn",
-            charity_addr: "9hnWF5YPyjQtoTVs4ArWZmrm1azonBqqY1zk23R7Vqrn5wVtMmK",
-            min: 1000000000
-        });
-    
-    const [popup, setPopup] = React.useState({
-        deadline: 900,
-        erg: 23480000000,
-        address: "8UApt8czfFVuTgQmMwtsRBZ4nfWquNiSwCWUjMg"
-    })
-    
+    const [raffle, setRaffle] = React.useState({});
+    const [popup, setPopup] = React.useState({})
     const [feedback, setFeedback] = React.useState(false);
     const [errorSnakbar, setErrorSnakbar] = React.useState(false);
     const [formValues, setValues] = React.useState({})
     
     /* Get raffle data from back-end */
-    /*
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffles/byId/:id`)
+        axios.get(`${baseUrl}/raffle/:id`)
         .then(res => {
-        const response = res.data;
-        setRaffle(response)
+            const response = res.data;
+            setRaffle(response)
+        })
+        .catch(res => {
+            setRaffle({})
         })
     }, []);
-    */
     
     const handleChange = (e) => {
         let value = e.target.value
         if (e.target.name === "erg")
         {
-            value = Number(value)
+            value = Number(value) * 1000000000
         }
         setValues((prevState) => ({
             ...prevState,
@@ -110,9 +95,11 @@ export default function Raffle() {
         }))
     }
     
+    /* Request to donate to the raffle */
     const handleDonate = (e) => {
+        console.log("handleDonate executed")
         e.preventDefault()
-        axios.post(`${baseUrl}/donate/`, formValues)
+        axios.post(`${baseUrl}/raffle/donate`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)
@@ -146,7 +133,6 @@ export default function Raffle() {
       />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
-          {/* End hero unit */}
           <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
                 <Card className={classes.card}>
@@ -225,7 +211,7 @@ export default function Raffle() {
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
                       Donate
                     </Typography>
-                    <form className={classes.form} onSubmit={handleDonate}>
+                    <form id="donate_form" className={classes.form} onSubmit={handleDonate}>
                         <Grid container spacing={4}>
                             <Grid item xs={10}>
                             <TextField
@@ -254,6 +240,7 @@ export default function Raffle() {
                   </CardContent>
                   <CardActions>
                     <Button
+                        form="donate_form"
                         type="submit"
                         color="primary"
                         className={classes.submit}
