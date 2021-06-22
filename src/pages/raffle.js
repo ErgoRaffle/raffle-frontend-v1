@@ -83,7 +83,7 @@ export default function Raffle() {
         .catch(res => {
             setRaffle({})
         })
-    }, []);
+    }, [id]);
     
     const handleChange = (e) => {
         let value = e.target.value
