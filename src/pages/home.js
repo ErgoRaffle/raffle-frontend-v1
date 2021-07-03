@@ -9,6 +9,7 @@ import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
 import Footer from '../components/footer';
 import EmptyCard from '../components/emptyCard';
+import ProgressCard from '../components/progressCard';
 import { baseUrl } from '../config/server';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Home() {
   const classes = useStyles();
   const [raffles, setRaffles] = React.useState([]);
+  const [connecting, setConnecting] = React.useState(true);
+  const [pageState, setPageState] = React.useState("Connecting to server");
   
     /* Get list of raffles from back-end */
     React.useEffect(() => {
@@ -36,18 +39,21 @@ export default function Home() {
             const response = res.data
             if (response.code === 200)
             {
-                console.log("we're good")
                 setRaffles(response.items)
+                setConnecting(false)
+                setPageState("Raffles received")
             }
             else
             {
-                console.log("response not 200 case")
                 setRaffles([])
+                setConnecting(false)
+                setPageState("There are no raffle running")
             }
         })
         .catch(res => {
-            console.log("catch case")
             setRaffles([])
+            setConnecting(false)
+            setPageState("There was a problem connecting to the server")
         })
     }, []);
     
@@ -61,7 +67,7 @@ export default function Home() {
       />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
-          {raffles && <Grid container spacing={4}>
+          {raffles && !connecting && <Grid container spacing={4}>
             {raffles.map((raffle, ind) => (
               <Grid item key={ind} xs={12} sm={6} md={4} lg={4}>
                 <RaffleCard raffle={raffle} />
@@ -69,10 +75,13 @@ export default function Home() {
             ))}
             </Grid>
           }
-          {!raffles.length && (
+          {!raffles.length && !connecting && (
             <EmptyCard 
-                text="There are no raffle running"
+                text={pageState}
             />
+          )}
+          {!raffles.length && connecting && (
+            <ProgressCard />
           )}
         </Container>
       </main>

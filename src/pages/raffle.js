@@ -18,6 +18,7 @@ import Popup from '../components/popup';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import EmptyCard from '../components/emptyCard';
+import ProgressCard from '../components/progressCard';
 import { baseUrl } from '../config/server';
 
 function Alert(props) {
@@ -74,6 +75,8 @@ export default function Raffle() {
     const [formValues, setValues] = React.useState({
         "id": id
     })
+    const [connecting, setConnecting] = React.useState(true);
+    const [pageState, setPageState] = React.useState("Connecting to server");
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
@@ -84,16 +87,22 @@ export default function Raffle() {
             {
                 setRaffle(response)
                 setRaffleExist(true)
+                setConnecting(false)
+                setPageState("Raffle received")
             }
             else
             {
                 setRaffle({})
                 setRaffleExist(false)
+                setConnecting(false)
+                setPageState("There is no data about this raffle")
             }
         })
         .catch(res => {
             setRaffle({})
             setRaffleExist(false)
+            setConnecting(false)
+            setPageState("There was a problem connecting to the server")
         })
     }, [id]);
     
@@ -111,7 +120,6 @@ export default function Raffle() {
     
     /* Request to donate to the raffle */
     const handleDonate = (e) => {
-        console.log("handleDonate executed")
         e.preventDefault()
         axios.post(`${baseUrl}/raffle/donate`, formValues)
         .then(res => {
@@ -147,7 +155,7 @@ export default function Raffle() {
       />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
-          {raffleExist && <Grid container spacing={4}>
+          {raffleExist && !connecting && <Grid container spacing={4}>
               <Grid item xs={12} md={8}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
@@ -280,7 +288,7 @@ export default function Raffle() {
                     <Popup
                         deadline={popup.deadline}
                         erg={popup.erg}
-                        address={popup.address}
+                        address={popup.address || ""}
                         open={feedback} 
                         onClose={handleClose}
                     />
@@ -294,10 +302,13 @@ export default function Raffle() {
               </Grid>
           </Grid>
         }
-        {!raffleExist && (
+        {!raffleExist && !connecting && (
             <EmptyCard 
-                text="There is no data about this raffle"
+                text={pageState}
             />
+        )}
+        {!raffleExist && connecting && (
+            <ProgressCard />
         )}
         </Container>
       </main>

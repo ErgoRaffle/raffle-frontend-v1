@@ -73,7 +73,7 @@ export default function Popup(props) {
         <b
             onClick={() => {navigator.clipboard.writeText(props.address)}}
             className={classes.copyText}
-        > {props.address}</b>;
+        > {(props.address.length > 56) ? `${props.address.substring(0, 28)}...${props.address.substring(props.address.length-28)}` : props.address}</b>;
         the operation will be done automatically afterward.
         </DialogContentText>
     </DialogContent>
