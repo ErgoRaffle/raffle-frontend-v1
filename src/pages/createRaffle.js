@@ -84,7 +84,7 @@ export default function CreateRaffle() {
     /* Request to create raffle */
     const handleCreate = (e) => {
         e.preventDefault()
-        axios.post(`${baseUrl}/raffles/add`, formValues)
+        axios.post(`${baseUrl}/raffle/add`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)

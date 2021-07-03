@@ -77,7 +77,7 @@ export default function Raffle() {
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffles/${id}`)
+        axios.get(`${baseUrl}/raffle/${id}`)
         .then(res => {
             const response = res.data;
             if (response.code === 200)
