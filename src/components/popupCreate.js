@@ -2,9 +2,7 @@ import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   time: {
@@ -21,12 +19,6 @@ const useStyles = makeStyles((theme) => ({
       }
   }
 }));
-
-const timerProps = {
-  isPlaying: true,
-  size: 160,
-  strokeWidth: 12
-};
 
 export default function PopupCreate(props) {
   const classes = useStyles();
