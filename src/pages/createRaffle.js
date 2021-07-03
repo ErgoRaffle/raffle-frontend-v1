@@ -84,7 +84,7 @@ export default function CreateRaffle() {
     /* Request to create raffle */
     const handleCreate = (e) => {
         e.preventDefault()
-        axios.post(`${baseUrl}/raffle/add`, formValues)
+        axios.post(`${baseUrl}/raffles/add`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)
@@ -130,7 +130,7 @@ export default function CreateRaffle() {
               <TextField
                 value={formValues.name}
                 autoComplete="name"
-                name="Name"
+                name="name"
                 variant="outlined"
                 fullWidth
                 id="name"
@@ -166,9 +166,9 @@ export default function CreateRaffle() {
                 variant="outlined"
                 required
                 fullWidth
-                id="deadline"
+                id="deadlineHeight"
                 label="Deadline"
-                name="deadline"
+                name="deadlineHeight"
                 type="number"
                 onChange = {handleChange_num}
               />
@@ -178,9 +178,9 @@ export default function CreateRaffle() {
                 variant="outlined"
                 required
                 fullWidth
-                name="minDonation"
+                name="minToRaise"
                 label="Minimum Donation"
-                id="minDonation"
+                id="minToRaise"
                 type="number"
                 onChange = {handleChange_num}
               />
@@ -195,9 +195,9 @@ export default function CreateRaffle() {
                 variant="outlined"
                 required
                 fullWidth
-                id="charityShare"
+                id="charityPercent"
                 label="Charity"
-                name="charityShare"
+                name="charityPercent"
                 type="number"
                 onChange = {handleChange_num}
               />
@@ -207,9 +207,9 @@ export default function CreateRaffle() {
                 variant="outlined"
                 required
                 fullWidth
-                name="winnerShare"
+                id="winnerPercent"
                 label="Winner"
-                id="winnerShare"
+                name="winnerPercent"
                 type="number"
                 onChange = {handleChange_num}
               />

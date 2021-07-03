@@ -77,7 +77,7 @@ export default function Raffle() {
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffle/${id}`)
+        axios.get(`${baseUrl}/raffles/${id}`)
         .then(res => {
             const response = res.data;
             if (response.code === 200)
@@ -210,6 +210,26 @@ export default function Raffle() {
                             name="Deadline"
                             readOnly
                             value={raffle.deadline || ""}
+                        />
+                        </Grid>
+                        <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            id="charityPercent"
+                            label="Charity"
+                            name="charityPercent"
+                            readOnly
+                            value={raffle.charity_percent || ""}
+                        />
+                        </Grid>
+                        <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            id="winnerPercent"
+                            label="Winner"
+                            name="winnerPercent"
+                            readOnly
+                            value={raffle.winner_percent || ""}
                         />
                         </Grid>
                     </Grid>

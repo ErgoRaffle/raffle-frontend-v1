@@ -36,14 +36,17 @@ export default function Home() {
             const response = res.data
             if (response.code === 200)
             {
+                console.log("we're good")
                 setRaffles(response.items)
             }
             else
             {
+                console.log("response not 200 case")
                 setRaffles([])
             }
         })
         .catch(res => {
+            console.log("catch case")
             setRaffles([])
         })
     }, []);
