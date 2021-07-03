@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-import Popup from '../components/popup';
+import PopupCreate from '../components/popupCreate';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import { baseUrl } from '../config/server';
@@ -235,10 +235,8 @@ export default function CreateRaffle() {
           >
             Create
           </Button>
-          <Popup
-            deadline={popup.deadline}
-            erg={popup.erg}
-            address={popup.address}
+          <PopupCreate
+            txId={popup.txId}
             open={feedback} 
             onClose={handleClose}
           />
