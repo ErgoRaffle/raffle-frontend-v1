@@ -80,7 +80,7 @@ export default function Raffle() {
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffle/${id}`)
+        axios.get(`${baseUrl}raffle/${id}`)
         .then(res => {
             const response = res.data;
             if (response.code === 200)
@@ -121,7 +121,7 @@ export default function Raffle() {
     /* Request to donate to the raffle */
     const handleDonate = (e) => {
         e.preventDefault()
-        axios.post(`${baseUrl}/raffle/donate`, formValues)
+        axios.post(`${baseUrl}raffle/donate`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)

@@ -56,7 +56,7 @@ export default function CreateRaffle() {
     
     /* Get service share (Z) from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffle_share`)
+        axios.get(`${baseUrl}raffle_share`)
         .then(res => {
             const response = res.data;
             setServiceShare(response.z)
@@ -84,7 +84,7 @@ export default function CreateRaffle() {
     /* Request to create raffle */
     const handleCreate = (e) => {
         e.preventDefault()
-        axios.post(`${baseUrl}/raffle/add`, formValues)
+        axios.post(`${baseUrl}raffle/add`, formValues)
         .then(res => {
             const response = res.data;
             setPopup(response)

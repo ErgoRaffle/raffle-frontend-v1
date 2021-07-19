@@ -34,7 +34,7 @@ export default function Home() {
   
     /* Get list of raffles from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}/raffle`)
+        axios.get(`${baseUrl}raffle`)
         .then(res => {
             const response = res.data
             if (response.code === 200)
@@ -62,7 +62,7 @@ export default function Home() {
     <React.Fragment>
       <CssBaseline />
       <Header 
-        buttonLink="/create"
+        buttonLink="create"
         buttonText="Create Raffle"
       />
       <main className={classes.main}>
