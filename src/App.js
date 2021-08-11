@@ -3,7 +3,8 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import Home from './pages/home';
@@ -15,14 +16,17 @@ export default function App() {
     <Router>
       <div>
         <Switch>
-          <Route path="/raffle/:id">
+          <Route exact path="/raffle/:id">
             <Raffle />
           </Route>
-          <Route path="/create">
+          <Route exact path="/create">
             <CreateRaffle />
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <Home />
+          </Route>
+          <Route>
+            <Redirect to="/"/>
           </Route>
         </Switch>
       </div>

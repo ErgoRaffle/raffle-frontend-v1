@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
+import { BottomScrollListener } from 'react-bottom-scroll-listener';
 
 import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   main: {
       minHeight: "calc(100vh - 148px)"
+  },
+  cardContainer: {
+      marginBottom: 20
   }
 }));
 
@@ -31,33 +35,50 @@ export default function Home() {
   const [raffles, setRaffles] = React.useState([]);
   const [connecting, setConnecting] = React.useState(true);
   const [pageState, setPageState] = React.useState("Connecting to server");
+  const [moreRaffles, setMoreRaffles] = React.useState(false);
+  const [rafflesOffset, setOffset] = React.useState(0);
   
     /* Get list of raffles from back-end */
     React.useEffect(() => {
-        axios.get(`${baseUrl}raffle`)
+        getRaffles()
+    }, []);
+    
+    const getRaffles = () => {
+        setConnecting(true)
+        axios.get(`${baseUrl}raffle?offset=${rafflesOffset}&limit=9`)
         .then(res => {
             const response = res.data
-            if (response.code === 200)
+            const newRaffles = raffles.concat(response.items)
+            setRaffles(newRaffles)
+            setOffset(Math.min(response.total, newRaffles.length))
+            setConnecting(false)
+            
+            if (newRaffles.length < response.total)
             {
-                setRaffles(response.items)
-                setConnecting(false)
+                setMoreRaffles(true)
+            }
+            if (newRaffles.length)
+            {
                 setPageState("Raffles received")
             }
             else
             {
-                setRaffles([])
-                setConnecting(false)
                 setPageState("There are no raffle running")
             }
         })
         .catch(res => {
-            setRaffles([])
             setConnecting(false)
             setPageState("There was a problem connecting to the server")
         })
-    }, []);
+    }
     
-
+    const checkEndOfRaffles = () => {
+        if (moreRaffles && !connecting)
+        {
+            getRaffles()
+        }
+    }
+ 
   return (
     <React.Fragment>
       <CssBaseline />
@@ -67,20 +88,23 @@ export default function Home() {
       />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
-          {raffles && !connecting && <Grid container spacing={4}>
-            {raffles.map((raffle, ind) => (
-              <Grid item key={ind} xs={12} sm={6} md={4} lg={4}>
-                <RaffleCard raffle={raffle} />
-              </Grid>
-            ))}
+          {raffles && (
+            <Grid container className={classes.cardContainer} spacing={4}>
+                <BottomScrollListener onBottom={checkEndOfRaffles}>
+                    {raffles.map((raffle, ind) => (
+                    <Grid item key={ind} xs={12} sm={6} md={4} lg={4}>
+                        <RaffleCard raffle={raffle} />
+                    </Grid>
+                    ))}
+                </BottomScrollListener>
             </Grid>
-          }
+          )}
           {!raffles.length && !connecting && (
             <EmptyCard 
                 text={pageState}
             />
           )}
-          {!raffles.length && connecting && (
+          {connecting && (
             <ProgressCard />
           )}
         </Container>
