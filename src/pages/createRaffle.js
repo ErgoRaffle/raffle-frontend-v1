@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-import PopupCreate from '../components/popupCreate';
+import Popup from '../components/popup';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import { baseUrl } from '../config/server';
@@ -161,7 +161,42 @@ export default function CreateRaffle() {
                 onChange = {handleChange_str}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="walletAddr"
+                label="Wallet Address"
+                name="walletAddr"
+                onChange = {handleChange_str}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="minToRaise"
+                label="Donation Goal (nano ERG)"
+                id="minToRaise"
+                type="number"
+                onChange = {handleChange_num}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="ticketPrice"
+                label="Ticket Price"
+                id="ticketPrice"
+                type="number"
+                onChange = {handleChange_num}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
@@ -173,24 +208,12 @@ export default function CreateRaffle() {
                 onChange = {handleChange_num}
               />
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="minToRaise"
-                label="Minimum Donation"
-                id="minToRaise"
-                type="number"
-                onChange = {handleChange_num}
-              />
-            </Grid>
             <Grid item xs={12}>
                 <Typography color="primary">
                 Shares (Percent)
                 </Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 variant="outlined"
                 required
@@ -202,7 +225,7 @@ export default function CreateRaffle() {
                 onChange = {handleChange_num}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 variant="outlined"
                 required
@@ -214,7 +237,7 @@ export default function CreateRaffle() {
                 onChange = {handleChange_num}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -235,8 +258,10 @@ export default function CreateRaffle() {
           >
             Create
           </Button>
-          <PopupCreate
-            txId={popup.txId}
+          <Popup
+            deadline={popup.deadline}
+            erg={popup.erg}
+            address={popup.address || ""}
             open={feedback} 
             onClose={handleClose}
           />

@@ -77,40 +77,32 @@ export default function Raffle() {
     })
     const [connecting, setConnecting] = React.useState(true);
     const [pageState, setPageState] = React.useState("Connecting to server");
+    const [payment, setPayment] = React.useState(0);
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
         axios.get(`${baseUrl}raffle/${id}`)
         .then(res => {
             const response = res.data;
-            if (response.code === 200)
-            {
-                setRaffle(response)
-                setRaffleExist(true)
-                setConnecting(false)
-                setPageState("Raffle received")
-            }
-            else
-            {
-                setRaffle({})
-                setRaffleExist(false)
-                setConnecting(false)
-                setPageState("There is no data about this raffle")
-            }
+            setRaffle(response)
+            setRaffleExist(true)
+            setConnecting(false)
+            setPageState("Raffle received")
         })
         .catch(res => {
             setRaffle({})
             setRaffleExist(false)
             setConnecting(false)
-            setPageState("There was a problem connecting to the server")
+            setPageState("There is no data about this raffle")
         })
     }, [id]);
     
     const handleChange = (e) => {
         let value = e.target.value
-        if (e.target.name === "erg")
+        if (e.target.name === "ticketCounts")
         {
-            value = Number(value) * 1000000000
+            value = Number(value)
+            setPayment(value * raffle.ticketPrice)
         }
         setValues((prevState) => ({
             ...prevState,
@@ -156,7 +148,7 @@ export default function Raffle() {
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
           {raffleExist && !connecting && <Grid container spacing={4}>
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12} lg={8}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
@@ -168,7 +160,7 @@ export default function Raffle() {
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid item xs={12} lg={4}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
@@ -178,12 +170,12 @@ export default function Raffle() {
                         {raffle.erg / 1000000000} ERG
                     </Typography>
                     <Typography color="textSecondary">
-                      minimum donation: {raffle.min / 1000000000} ERG
+                      Donation Goal: {(raffle.min > 1000000) ? `${raffle.min / 1000000000} ERG` : `${raffle.min} nano ERG`}
                     </Typography>
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} lg={6}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
@@ -207,10 +199,10 @@ export default function Raffle() {
                             label="Charity Address"
                             name="charityAddr"
                             readOnly
-                            value={raffle.charity_addr || ""}
+                            value={raffle.charityAddr || ""}
                         />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                         <TextField
                             fullWidth
                             id="deadline"
@@ -220,31 +212,31 @@ export default function Raffle() {
                             value={raffle.deadline || ""}
                         />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={2}>
                         <TextField
                             fullWidth
                             id="charityPercent"
                             label="Charity"
                             name="charityPercent"
                             readOnly
-                            value={raffle.charity_percent || ""}
+                            value={raffle.charityPercent || ""}
                         />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={2}>
                         <TextField
                             fullWidth
                             id="winnerPercent"
                             label="Winner"
                             name="winnerPercent"
                             readOnly
-                            value={raffle.winner_percent || ""}
+                            value={raffle.winnerPercent || ""}
                         />
                         </Grid>
                     </Grid>
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} lg={6}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" color="primary" component="h2">
@@ -252,7 +244,7 @@ export default function Raffle() {
                     </Typography>
                     <form id="donate_form" className={classes.form} onSubmit={handleDonate}>
                         <Grid container spacing={4}>
-                            <Grid item xs={10}>
+                            <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 id="walletAddr"
@@ -262,15 +254,35 @@ export default function Raffle() {
                                 onChange = {handleChange}
                             />
                             </Grid>
-                            <Grid item xs={10}>
+                            <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                id="erg"
-                                label="ERG"
-                                name="erg"
+                                id="ticketCounts"
+                                label="Ticket Counts"
+                                name="ticketCounts"
                                 required
                                 type="number"
                                 onChange = {handleChange}
+                            />
+                            </Grid>
+                            <Grid item xs={4}>
+                            <TextField
+                                fullWidth
+                                id="ticketPrice"
+                                label="Ticket Price"
+                                name="ticketPrice"
+                                readOnly
+                                value={raffle.ticketPrice || ""}
+                            />
+                            </Grid>
+                            <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                id="payment"
+                                label="Payment"
+                                name="payment"
+                                readOnly
+                                value={payment}
                             />
                             </Grid>
                         </Grid>
