@@ -12,22 +12,27 @@ import Footer from '../components/footer';
 import EmptyCard from '../components/emptyCard';
 import ProgressCard from '../components/progressCard';
 import { baseUrl } from '../config/server';
+import Card from "@material-ui/core/Card";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  warningIcon: {
-      fontSize: 100,
-      color: "rgba(0, 0, 0, 0.1)"
-  },
-  main: {
-      minHeight: "calc(100vh - 148px)"
-  },
-  cardContainer: {
-      marginBottom: 20
-  }
+    cardGrid: {
+        paddingTop: theme.spacing(8),
+        paddingBottom: theme.spacing(8),
+    },
+    warningIcon: {
+        fontSize: 100,
+        color: "rgba(0, 0, 0, 0.1)"
+    },
+    main: {
+        minHeight: "calc(100vh - 148px)"
+    },
+    cardContainer: {
+        marginBottom: 20
+    },
+    testnetBox: {
+        marginBottom: theme.spacing(2)
+    }
 }));
 
 export default function Home() {
@@ -37,6 +42,7 @@ export default function Home() {
   const [pageState, setPageState] = React.useState("Connecting to server");
   const [moreRaffles, setMoreRaffles] = React.useState(false);
   const [rafflesOffset, setOffset] = React.useState(0);
+  const [currentHeight, setCurrentHeight] = React.useState(0)
   
     /* Get list of raffles from back-end */
     React.useEffect(() => {
@@ -50,6 +56,7 @@ export default function Home() {
             const response = res.data
             const newRaffles = raffles.concat(response.items)
             setRaffles(newRaffles)
+            setCurrentHeight(response.currentHeight)
             setOffset(Math.min(response.total, newRaffles.length))
             setConnecting(false)
             
@@ -88,12 +95,17 @@ export default function Home() {
       />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
+          <Card variant="outlined" className={classes.testnetBox}>
+              <Alert severity="warning">
+                  This service is currently running on testnet!
+              </Alert>
+          </Card>
           {raffles && (
             <Grid container className={classes.cardContainer} spacing={4}>
                 <BottomScrollListener onBottom={checkEndOfRaffles}>
                     {raffles.map((raffle, ind) => (
                     <Grid item key={ind} xs={12} sm={6} md={4} lg={4}>
-                        <RaffleCard raffle={raffle} />
+                        <RaffleCard raffle={raffle} currentHeight={currentHeight}/>
                     </Grid>
                     ))}
                 </BottomScrollListener>
@@ -102,6 +114,7 @@ export default function Home() {
           {!raffles.length && !connecting && (
             <EmptyCard 
                 text={pageState}
+                retry={getRaffles}
             />
           )}
           {connecting && (
