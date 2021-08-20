@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -38,6 +39,12 @@ function raffleIcon(raffleId) {
 
 export default function RaffleCard(props) {
     const classes = useStyles();
+
+    const deadlineString = () => {
+        if (props.raffle.deadline > props.currentHeight && props.raffle.deadline - props.currentHeight < 720) return `Deadline: about ${Math.round((props.raffle.deadline - props.currentHeight) / 30)} hours`
+        else if (props.raffle.deadline > props.currentHeight) return `Deadline: about ${Math.round((props.raffle.deadline - props.currentHeight) / 720)} days`
+        else return `Ended`
+    }
   
     return (
         <Card className={classes.card}>
@@ -56,12 +63,16 @@ export default function RaffleCard(props) {
           </CardContent>
           <CardContent className={classes.cardContent}>
             <Typography>
-                {props.raffle.description}
+                {props.raffle.description.split("\n").map(row => (
+                    <div>
+                        {row}
+                    </div>
+                ))}
             </Typography>
           </CardContent>
           <CardContent align="center" className={classes.cardDeadline}>
             <Typography color="textSecondary">
-                Deadline: {props.raffle.deadline}
+                {deadlineString()}
             </Typography>
           </CardContent>
           <CardActions>

@@ -10,6 +10,7 @@ import {
 import Home from './pages/home';
 import Raffle from './pages/raffle';
 import CreateRaffle from './pages/createRaffle';
+import Faq from './pages/faq';
 
 export default function App() {
   return (
@@ -21,6 +22,9 @@ export default function App() {
           </Route>
           <Route exact path="/create">
             <CreateRaffle />
+          </Route>
+          <Route exact path="/faq">
+            <Faq />
           </Route>
           <Route exact path="/">
             <Home />

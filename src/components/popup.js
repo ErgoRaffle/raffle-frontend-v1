@@ -5,6 +5,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const useStyles = makeStyles((theme) => ({
   time: {
@@ -22,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const timerProps = {
   isPlaying: true,
   size: 160,
@@ -29,9 +36,17 @@ const timerProps = {
 };
 
 export default function Popup(props) {
-  const classes = useStyles();
-    
-  return (
+    const classes = useStyles();
+    const [copiedSnackbar, setCopiedSnackbar] = React.useState(false);
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setCopiedSnackbar(false);
+    };
+
+    return (
     <Dialog
     open={props.open}
     onClose={props.onClose}
@@ -64,18 +79,29 @@ export default function Popup(props) {
     </DialogContent>
     <DialogContent>
         <DialogContentText id="alert-dialog-description">
-        Send exactly 
-        <b
-            onClick={() => {navigator.clipboard.writeText(props.erg / 1000000000)}}
-            className={classes.copyText}
-        > {props.erg / 1000000000} </b>
-        ERG to 
-        <b
-            onClick={() => {navigator.clipboard.writeText(props.address)}}
-            className={classes.copyText}
-        > {(props.address.length > 40) ? `${props.address.substring(0, 20)}...${props.address.substring(props.address.length-20)}` : props.address}</b>;
-        the operation will be done automatically afterward.
+        Send exactly
+        <CopyToClipboard text={props.erg / 1000000000} onCopy={() => {setCopiedSnackbar(true)}}>
+            <b className={classes.copyText}> {props.erg / 1000000000} </b>
+        </CopyToClipboard>
+        ERG to
+        <CopyToClipboard text={props.address} onCopy={() => {setCopiedSnackbar(true)}}>
+            <b className={classes.copyText}> {(props.address.length > 40) ? `${props.address.substring(0, 20)}...${props.address.substring(props.address.length-20)}` : props.address}</b>
+        </CopyToClipboard>
+        ; the operation will be done automatically afterward.
         </DialogContentText>
+        <Snackbar
+            open={copiedSnackbar}
+            autoHideDuration={1500}
+            onClose={handleClose}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+            }}
+        >
+            <Alert onClose={props.onClose} severity="info">
+                Copied!
+            </Alert>
+        </Snackbar>
     </DialogContent>
     <DialogContent>
         <DialogContentText id="alert-dialog-description">
