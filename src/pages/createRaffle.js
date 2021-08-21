@@ -335,16 +335,14 @@ export default function CreateRaffle() {
                                 value={serviceShare}
                               />
                             </Grid>
-                            <Grid item xs={12}>
-                              <div  align="center" className={classes.captcha}>
+                            {captchaRequired && (<Grid key="recaptcha" item xs={12}>
                                 <DynamicRecaptcha
                                     onChange = {handleChange_captcha}
                                     onExpire = {handleExpire_captcha}
                                     onRequired = {setCaptchaRequired}
                                     onError = {popError}
                                 />
-                              </div>
-                            </Grid>
+                            </Grid>)}
                             <Grid item xs={12}>
                             <FormControlLabel
                                 control={

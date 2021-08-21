@@ -379,7 +379,7 @@ export default function Raffle() {
                                               value={formValues.walletAddr}
                                           />
                                       </Grid>
-                                      <Grid item xs={8}>
+                                      <Grid item xs={7}>
                                           <TextField
                                               fullWidth
                                               id="ticketCounts"
@@ -390,7 +390,7 @@ export default function Raffle() {
                                               onChange = {handleChange}
                                           />
                                       </Grid>
-                                      <Grid item xs={4}>
+                                      <Grid item xs={5}>
                                           <TextField
                                               fullWidth
                                               id="ticketPrice"
@@ -407,7 +407,7 @@ export default function Raffle() {
                                               label="Fee (Erg)"
                                               name="fee"
                                               disabled
-                                              value={raffle.fee / 1000000000 || ""}
+                                              value={2 * raffle.fee / 1000000000 || ""}
                                           />
                                       </Grid>
                                       <Grid item xs={8}>
