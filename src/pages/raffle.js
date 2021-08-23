@@ -114,6 +114,10 @@ export default function Raffle() {
     const [captchaVerified, setCaptchaVerified] = React.useState(false);
     const [captchaRequired, setCaptchaRequired] = React.useState(true);
     const [agreedToTerms, setAgreedToTerms] = React.useState(false);
+    const [walletAddrValidation, setWalletAddrValidation] = React.useState({
+        "error": false,
+        "text": ""
+    })
     
     /* Get raffle data from back-end */
     React.useEffect(() => {
@@ -136,12 +140,19 @@ export default function Raffle() {
                 setConnecting(false)
                 setPageState("Raffle received")
             })
-            .catch(res => {
+            .catch(error => {
                 setRaffle({})
                 setRaffleExist(false)
                 setConnecting(false)
-                setPageState("There is no data about this raffle")
+                const response = error.response
+                if (response.status === 400) setPageState("There is no data about this raffle")
+                else setPageState("There was a problem connecting to the server")
             })
+    }
+
+    const validateBase58 = (address) => {
+        const regex = RegExp("^[1-9A-HJ-NP-Za-km-z]+$")
+        return address.match(regex) !== null
     }
     
     const handleChange = (e) => {
@@ -150,6 +161,17 @@ export default function Raffle() {
         {
             value = Number(value)
             setPayment(value * raffle.ticketPrice + 2 * raffle.fee)
+        }
+        else
+        {
+            if (validateBase58(value) || value === "") setWalletAddrValidation({
+                "error": false,
+                "text": ""
+            })
+            else setWalletAddrValidation({
+                "error": true,
+                "text": "should be Base58"
+            })
         }
         setValues((prevState) => ({
             ...prevState,
@@ -188,8 +210,10 @@ export default function Raffle() {
                 setPopup(response)
                 setFeedback(true);
             })
-            .catch(res => {
-                setSnakbarMessage("There was a problem connecting to the server")
+            .catch(error => {
+                const response = error.response
+                if (response.status === 400) setSnakbarMessage(response.data.message)
+                else setSnakbarMessage("There was a problem connecting to the server")
                 setErrorSnakbar(true);
             })
         }
@@ -218,6 +242,16 @@ export default function Raffle() {
         setSnakbarMessage(message)
         setErrorSnakbar(true);
     }
+
+    const deadlineString = (deadline, currentHeight) => {
+        if (deadline > currentHeight && deadline - currentHeight < 30) return `Block ${deadline}, about ${(deadline - currentHeight) * 2} minutes`
+        else if (deadline > currentHeight && deadline - currentHeight < 60) return `Block ${deadline}, about an hour`
+        else if (deadline > currentHeight && deadline - currentHeight < 720) return `Block ${deadline}, about ${Math.round((deadline - currentHeight) / 30)} hours`
+        else if (deadline > currentHeight) return `Block ${deadline}, about ${Math.round((deadline - currentHeight) / 720)} days`
+        else return `Ended`
+    }
+
+    const floatRound = (value) => parseFloat(value.toFixed(5))
     
     return (
     <React.Fragment>
@@ -254,10 +288,10 @@ export default function Raffle() {
                       <Grid container display="inline-flex">
                           <Grid item x={8} className={classes.depositInfo}>
                               <Typography component="p" variant="h5">
-                                  Raised: {raffle.erg / 1000000000} ERG
+                                  Raised: {floatRound(raffle.erg / 1000000000)} ERG
                               </Typography>
                               <Typography color="textSecondary">
-                                  {`Donation Goal: ${raffle.min / 1000000000} ERG`}
+                                  Donation Goal: {floatRound(raffle.min / 1000000000)} ERG
                               </Typography>
                           </Grid>
                           <Grid item x={4} className={classes.depositProgress}>
@@ -329,7 +363,7 @@ export default function Raffle() {
                                       label="Deadline"
                                       name="Deadline"
                                       disabled
-                                      value={`Block ${raffle.deadline}, ${(raffle.deadline > raffle.currentHeight) ? `about ${Math.round((raffle.deadline - raffle.currentHeight) / 30)} hours` : `Ended`}`}
+                                      value={deadlineString(raffle.deadline, raffle.currentHeight)}
                                   />
                               </Grid>
                               <Grid item xs={4}>
@@ -377,6 +411,8 @@ export default function Raffle() {
                                               required
                                               onChange = {handleChange}
                                               value={formValues.walletAddr}
+                                              error={walletAddrValidation.error}
+                                              helperText={walletAddrValidation.text}
                                           />
                                       </Grid>
                                       <Grid item xs={7}>
@@ -451,7 +487,7 @@ export default function Raffle() {
                                       variant="contained"
                                       color="primary"
                                       className={classes.submit}
-                                      disabled={!agreedToTerms}
+                                      disabled={(!agreedToTerms) || walletAddrValidation.error}
                                   >
                                       Donate
                                   </Button>
