@@ -40,7 +40,7 @@ export default function Home() {
   const [raffles, setRaffles] = React.useState([]);
   const [connecting, setConnecting] = React.useState(true);
   const [pageState, setPageState] = React.useState("Connecting to server");
-  const [moreRaffles, setMoreRaffles] = React.useState(false);
+  const [moreRaffles, setMoreRaffles] = React.useState(true);
   const [rafflesOffset, setOffset] = React.useState(0);
   const [currentHeight, setCurrentHeight] = React.useState(0)
   
@@ -57,12 +57,12 @@ export default function Home() {
             const newRaffles = raffles.concat(response.items)
             setRaffles(newRaffles)
             setCurrentHeight(response.currentHeight)
-            setOffset(Math.min(response.total, newRaffles.length))
+            setOffset(newRaffles.length)
             setConnecting(false)
             
-            if (newRaffles.length < response.total)
+            if (response.total < 9)
             {
-                setMoreRaffles(true)
+                setMoreRaffles(false)
             }
             if (newRaffles.length)
             {
@@ -73,7 +73,7 @@ export default function Home() {
                 setPageState("There are no raffle running")
             }
         })
-        .catch(res => {
+        .catch(error => {
             setConnecting(false)
             setPageState("There was a problem connecting to the server")
         })

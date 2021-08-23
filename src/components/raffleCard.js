@@ -40,10 +40,23 @@ function raffleIcon(raffleId) {
 export default function RaffleCard(props) {
     const classes = useStyles();
 
-    const deadlineString = () => {
-        if (props.raffle.deadline > props.currentHeight && props.raffle.deadline - props.currentHeight < 720) return `Deadline: about ${Math.round((props.raffle.deadline - props.currentHeight) / 30)} hours`
-        else if (props.raffle.deadline > props.currentHeight) return `Deadline: about ${Math.round((props.raffle.deadline - props.currentHeight) / 720)} days`
+    const deadlineString = (deadline, currentHeight) => {
+        if (deadline > currentHeight && deadline - currentHeight < 30) return `Deadline: about ${(deadline - currentHeight) * 2} minutes`
+        else if (deadline > currentHeight && deadline - currentHeight < 60) return `Deadline: about an hour`
+        else if (deadline > currentHeight && deadline - currentHeight < 720) return `Deadline: about ${Math.round((deadline - currentHeight) / 30)} hours`
+        else if (deadline > currentHeight) return `Deadline: about ${Math.round((deadline - currentHeight) / 720)} days`
         else return `Ended`
+    }
+
+    const briefDescription = (description) => {
+        if (description.length > 100 || description.split("\n").length > 2)
+        {
+            var new_description = description.substring(0, 100).split("\n").slice(0, 2)
+            const l = new_description.length
+            new_description[l-1] = new_description[l-1].concat("...")
+            return new_description
+        }
+        else return description.split("\n")
     }
   
     return (
@@ -63,7 +76,7 @@ export default function RaffleCard(props) {
           </CardContent>
           <CardContent className={classes.cardContent}>
             <Typography>
-                {props.raffle.description.split("\n").map(row => (
+                {briefDescription(props.raffle.description).map(row => (
                     <div>
                         {row}
                     </div>
@@ -72,7 +85,7 @@ export default function RaffleCard(props) {
           </CardContent>
           <CardContent align="center" className={classes.cardDeadline}>
             <Typography color="textSecondary">
-                {deadlineString()}
+                {deadlineString(props.raffle.deadline, props.currentHeight)}
             </Typography>
           </CardContent>
           <CardActions>

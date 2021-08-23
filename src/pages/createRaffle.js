@@ -73,6 +73,32 @@ export default function CreateRaffle() {
     const [captchaRequired, setCaptchaRequired] = React.useState(true);
     const [agreedToTerms, setAgreedToTerms] = React.useState(false);
     const [deadlineEstimation, setDeadlineEstimation] = React.useState(0);
+    const [formValidation, setFormValidation] = React.useState({
+        "charityAddr": {
+            "error": false,
+            "text": ""
+        },
+        "walletAddr": {
+            "error": false,
+            "text": ""
+        },
+        "goal": {
+            "error": false,
+            "text": ""
+        },
+        "ticketPrice": {
+            "error": false,
+            "text": ""
+        },
+        "deadlineHeight": {
+            "error": false,
+            "text": ""
+        },
+        "charityPercent": {
+            "error": false,
+            "text": ""
+        }
+    })
     
     /* Get service share (Z) from back-end */
     React.useEffect(() => {
@@ -82,7 +108,7 @@ export default function CreateRaffle() {
             setServiceShare(response.z)
             setWinnerShare(100 - response.z)
         })
-        .catch(res => {
+        .catch(error => {
             setServiceShare(0)
             setSnakbarMessage("There was a problem connecting to the server")
             setErrorSnakbar(true);
@@ -102,6 +128,7 @@ export default function CreateRaffle() {
             ...prevState,
             [e.target.name]: (e.target.name === "ticketPrice" || e.target.name === "goal") ? Number(e.target.value) * 1000000000 : Number(e.target.value)
         }))
+        validateInput_num(e.target.name, e.target.value)
     }
     
     const handleChange_str = (e) => {
@@ -109,6 +136,7 @@ export default function CreateRaffle() {
             ...prevState,
             [e.target.name]: e.target.value
         }))
+        validateInput_str(e.target.name, e.target.value)
     }
 
     const handleChange_checkbox = (e) => {
@@ -142,8 +170,10 @@ export default function CreateRaffle() {
                 setPopup(response)
                 setFeedback(true);
             })
-            .catch(res => {
-                setSnakbarMessage("There was a problem connecting to the server")
+            .catch(error => {
+                const response = error.response
+                if (response.status === 400) setSnakbarMessage(response.data.message)
+                else setSnakbarMessage("There was a problem connecting to the server")
                 setErrorSnakbar(true);
             })
         }
@@ -177,6 +207,127 @@ export default function CreateRaffle() {
         if (value < 60) return `${value} minutes`
         else if (value < 1440) return `${Math.round(value / 60)} hours`
         else return `${Math.round(value / 1440)} days`
+    }
+
+    const validateBase58 = (address) => {
+        const regex = RegExp("^[1-9A-HJ-NP-Za-km-z]+$")
+        return address.match(regex) !== null
+    }
+
+    const validateInput_str = (name, value) => {
+        if (name === "charityAddr") {
+            if (validateBase58(value) || value === "") setFormValidation((prevState) => ({
+                    ...prevState,
+                    charityAddr: {
+                        "error": false,
+                        "text": ""
+                    }
+                }))
+            else setFormValidation((prevState) => ({
+                ...prevState,
+                charityAddr: {
+                    "error": true,
+                    "text": "should be Base58"
+                }
+            }))
+        }
+        else if (name === "walletAddr") {
+            if (validateBase58(value) || value === "") setFormValidation((prevState) => ({
+                ...prevState,
+                walletAddr: {
+                    "error": false,
+                    "text": ""
+                }
+            }))
+            else setFormValidation((prevState) => ({
+                ...prevState,
+                walletAddr: {
+                    "error": true,
+                    "text": "should be Base58"
+                }
+            }))
+        }
+    }
+
+    const validateInput_num = (name, value) => {
+        if (name === "goal") {
+            if (Number(value) >= 0.00001 || value === "") setFormValidation((prevState) => ({
+                ...prevState,
+                goal: {
+                    "error": false,
+                    "text": ""
+                }
+            }))
+            else setFormValidation((prevState) => ({
+                ...prevState,
+                goal: {
+                    "error": true,
+                    "text": "minimum value is 0.00001 Erg"
+                }
+            }))
+        }
+        else if (name === "ticketPrice") {
+            if (Number(value) >= 0.00001 || value === "") setFormValidation((prevState) => ({
+                ...prevState,
+                ticketPrice: {
+                    "error": false,
+                    "text": ""
+                }
+            }))
+            else setFormValidation((prevState) => ({
+                ...prevState,
+                ticketPrice: {
+                    "error": true,
+                    "text": "minimum value is 0.00001 Erg"
+                }
+            }))
+        }
+        else if (name === "deadlineHeight") {
+            if (Number(value) < 0 && value !== "") setFormValidation((prevState) => ({
+                ...prevState,
+                deadlineHeight: {
+                    "error": true,
+                    "text": "should be positive"
+                }
+            }))
+            else if (Number(value) > 262800 && value !== "") setFormValidation((prevState) => ({
+                ...prevState,
+                deadlineHeight: {
+                    "error": true,
+                    "text": "maximum value is 262800"
+                }
+            }))
+            else setFormValidation((prevState) => ({
+                ...prevState,
+                deadlineHeight: {
+                    "error": false,
+                    "text": ""
+                }
+            }))
+        }
+        else if (name === "charityPercent") {
+            if (Number(value) < 0 && value !== "") setFormValidation((prevState) => ({
+                ...prevState,
+                charityPercent: {
+                    "error": true,
+                    "text": "should be positive"
+                }
+            }))
+            else if (Number(value) + serviceShare > 100 && value !== "") setFormValidation((prevState) => ({
+                ...prevState,
+                charityPercent: {
+                    "error": true,
+                    "text": `should be between 0 and ${100 - serviceShare}`
+                }
+            }))
+            else setFormValidation((prevState) => ({
+                ...prevState,
+                charityPercent: {
+                    "error": false,
+                    "text": ""
+                }
+            }))
+        }
     }
 
   return (
@@ -230,6 +381,8 @@ export default function CreateRaffle() {
                                 label="Charity Address"
                                 name="charityAddr"
                                 onChange = {handleChange_str}
+                                error={formValidation.charityAddr.error}
+                                helperText={formValidation.charityAddr.text}
                               />
                             </Grid>
                             <Grid item xs={12}>
@@ -242,6 +395,8 @@ export default function CreateRaffle() {
                                 name="walletAddr"
                                 onChange = {handleChange_str}
                                 value={formValues.walletAddr}
+                                error={formValidation.walletAddr.error}
+                                helperText={formValidation.walletAddr.text}
                               />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -255,6 +410,8 @@ export default function CreateRaffle() {
                                 type="number"
                                 inputProps={{step: "any"}}
                                 onChange = {handleChange_num}
+                                error={formValidation.goal.error}
+                                helperText={formValidation.goal.text}
                               />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -268,6 +425,8 @@ export default function CreateRaffle() {
                                 type="number"
                                 inputProps={{step: "any"}}
                                 onChange = {handleChange_num}
+                                error={formValidation.ticketPrice.error}
+                                helperText={formValidation.ticketPrice.text}
                               />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -280,6 +439,8 @@ export default function CreateRaffle() {
                                 name="deadlineHeight"
                                 type="number"
                                 onChange = {handleChange_num}
+                                error={formValidation.deadlineHeight.error}
+                                helperText={formValidation.deadlineHeight.text}
                               />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -309,6 +470,8 @@ export default function CreateRaffle() {
                                 name="charityPercent"
                                 type="number"
                                 onChange = {handleChange_num}
+                                error={formValidation.charityPercent.error}
+                                helperText={formValidation.charityPercent.text}
                               />
                             </Grid>
                             <Grid item xs={12} sm={4}>
@@ -364,7 +527,15 @@ export default function CreateRaffle() {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            disabled={!agreedToTerms}
+                            disabled={
+                                (!agreedToTerms) ||
+                                formValidation.goal.error ||
+                                formValidation.charityAddr.error ||
+                                formValidation.charityPercent.error ||
+                                formValidation.walletAddr.error ||
+                                formValidation.deadlineHeight.error ||
+                                formValidation.ticketPrice.error
+                            }
                           >
                             Create
                           </Button>
