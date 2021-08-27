@@ -292,7 +292,7 @@ export default function Raffle() {
         else return `Ended`
     }
 
-    const floatRound = (value) => parseFloat(value.toFixed(5))
+    const floatRound = (value) => parseFloat(value.toFixed(4))
 
     return (
         <React.Fragment>
