@@ -449,10 +449,10 @@ export default function Raffle() {
                                 onError={popError}
                             />
                         </Grid>
-                        {(raffle.deadlineHeight > raffle.currentHeight) && (<Grid item xs={12}>
+                        {(raffle.deadline > raffle.currentHeight) && (<Grid item xs={12}>
                             <Divider variant="middle"/>
                         </Grid>)}
-                        {(raffle.deadlineHeight > raffle.currentHeight) && (<Grid item xs={12} lg={6}>
+                        {(raffle.deadline > raffle.currentHeight) && (<Grid item xs={12} lg={6}>
                             <Card className={classes.card}>
                                 <CardContent className={classes.cardContent}>
                                     <div className={classes.paper}>
@@ -567,7 +567,7 @@ export default function Raffle() {
                                 </CardContent>
                             </Card>
                         </Grid>)}
-                        {(raffle.deadlineHeight > raffle.currentHeight) && (<Grid item key="termCreate" xs={12} sm={12} md={6}>
+                        {(raffle.deadline > raffle.currentHeight) && (<Grid item key="termCreate" xs={12} sm={12} md={6}>
                             <Card className={classes.card}>
                                 <CardContent className={classes.cardContent}>
                                     <div className={classes.paper}>
