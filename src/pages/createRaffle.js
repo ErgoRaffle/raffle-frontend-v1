@@ -332,10 +332,7 @@ export default function CreateRaffle() {
 
   return (
     <React.Fragment>
-      <Header 
-        buttonLink="/"
-        buttonText="Home"
-      />
+      <Header />
     <main className={classes.main}>
     <Container component="main" maxWidth="lg" className={classes.container}>
       <CssBaseline />
