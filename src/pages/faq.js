@@ -40,10 +40,7 @@ export default function FAQ() {
     return (
         <React.Fragment>
             <CssBaseline />
-            <Header
-                buttonLink="create"
-                buttonText="Create Raffle"
-            />
+            <Header />
             <main className={classes.main}>
                 <Container className={classes.cardGrid} maxWidth="lg">
                     <Grid item key={0} xs={12}>

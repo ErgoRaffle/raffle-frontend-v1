@@ -89,15 +89,12 @@ export default function Home() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header 
-        buttonLink="create"
-        buttonText="Create Raffle"
-      />
+      <Header />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
           <Card variant="outlined" className={classes.testnetBox}>
               <Alert severity="warning">
-                  This service is currently running on testnet!
+                  You are using the Beta release. It's generally safe to use the raffle at this stage, but be sure that you understand the risks that come with it. Therefore, do not use it for mission critical campaigns and do not donate more than what you can afford to lose.
               </Alert>
           </Card>
           {raffles && (

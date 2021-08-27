@@ -297,10 +297,7 @@ export default function Raffle() {
     return (
         <React.Fragment>
             <CssBaseline />
-            <Header
-                buttonLink="/"
-                buttonText="Home"
-            />
+            <Header />
             <main className={classes.main}>
                 <Container className={classes.cardGrid} maxWidth="lg">
                     {raffleExist && !connecting && <Grid container spacing={4}>
@@ -452,10 +449,10 @@ export default function Raffle() {
                                 onError={popError}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <Divider variant="middle" />
-                        </Grid>
-                        <Grid item xs={12} lg={6}>
+                        {(raffle.deadlineHeight > raffle.currentHeight) && (<Grid item xs={12}>
+                            <Divider variant="middle"/>
+                        </Grid>)}
+                        {(raffle.deadlineHeight > raffle.currentHeight) && (<Grid item xs={12} lg={6}>
                             <Card className={classes.card}>
                                 <CardContent className={classes.cardContent}>
                                     <div className={classes.paper}>
@@ -569,8 +566,8 @@ export default function Raffle() {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </Grid>
-                        <Grid item key="termCreate" xs={12} sm={12} md={6}>
+                        </Grid>)}
+                        {(raffle.deadlineHeight > raffle.currentHeight) && (<Grid item key="termCreate" xs={12} sm={12} md={6}>
                             <Card className={classes.card}>
                                 <CardContent className={classes.cardContent}>
                                     <div className={classes.paper}>
@@ -590,7 +587,7 @@ export default function Raffle() {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </Grid>
+                        </Grid>)}
                     </Grid>
                     }
                     {!raffleExist && !connecting && (
