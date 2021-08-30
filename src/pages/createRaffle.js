@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Checkbox from '@material-ui/core/Checkbox';
+import { connect } from "react-redux";
 
 import Popup from '../components/popup';
 import DynamicRecaptcha from '../components/dynamicRecaptcha';
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CreateRaffle() {
+function CreateRaffle(props) {
     const classes = useStyles();
     const [formValues, setValues] = React.useState({
         "walletAddr": ""
@@ -80,7 +81,7 @@ export default function CreateRaffle() {
         },
         "walletAddr": {
             "error": false,
-            "text": ""
+            "text": props.walletAddr
         },
         "goal": {
             "error": false,
@@ -113,13 +114,15 @@ export default function CreateRaffle() {
             setSnakbarMessage("There was a problem connecting to the server")
             setErrorSnakbar(true);
         })
-
-        const walletAddress = localStorage.getItem('walletAddr')
-        if (walletAddress !== null) setValues((prevState) => ({
-            ...prevState,
-            "walletAddr": walletAddress
-        }))
     }, []);
+
+    React.useEffect(() => {
+        setValues((prevState) => ({
+            ...prevState,
+            walletAddr: props.walletAddr
+        }))
+        validateInput_str("walletAddr", props.walletAddr)
+    }, [props.walletAddr]);
     
     const handleChange_num = (e) => {
         if (e.target.name === "deadlineHeight") setDeadlineEstimation(e.target.value * 2)
@@ -391,7 +394,7 @@ export default function CreateRaffle() {
                                 label="Wallet Address"
                                 name="walletAddr"
                                 onChange = {handleChange_str}
-                                value={formValues.walletAddr}
+                                value={props.walletAddr}
                                 error={formValidation.walletAddr.error}
                                 helperText={formValidation.walletAddr.text}
                               />
@@ -586,3 +589,9 @@ export default function CreateRaffle() {
     </React.Fragment>
   );
 }
+
+const mapStateToProps = (state) => ({
+    walletAddr: state.walletAddr
+})
+
+export default connect(mapStateToProps)(CreateRaffle)

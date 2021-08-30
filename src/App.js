@@ -11,8 +11,15 @@ import Home from './pages/home';
 import Raffle from './pages/raffle';
 import CreateRaffle from './pages/createRaffle';
 import Faq from './pages/faq';
+import {loadAddress} from "./storage/store";
+import {connect} from "react-redux";
 
-export default function App() {
+function App(props) {
+
+  React.useEffect(() => {
+    props.loadWallet()
+  }, [])
+
   return (
     <Router>
       <div>
@@ -37,3 +44,13 @@ export default function App() {
     </Router>
   );
 }
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loadWallet: () => dispatch(loadAddress())
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
