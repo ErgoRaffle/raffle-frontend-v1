@@ -7,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
+import {clearAddress, setAddress} from "../storage/store";
 
 const useStyles = makeStyles((theme) => ({
     time: {
@@ -31,14 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PopupSetWallet(props) {
+function PopupSetWallet(props) {
   const classes = useStyles();
-  const [walletAddr, setWalletAddr] = React.useState("")
-
-    React.useEffect(() => {
-        const walletAddress = localStorage.getItem('walletAddr')
-        if (walletAddress !== null) setWalletAddr(walletAddress)
-    }, []);
+  const [walletAddr, setWalletAddr] = React.useState(props.walletAddr)
 
     const handleChange = (e) => {
         setWalletAddr(e.target.value)
@@ -47,11 +44,17 @@ export default function PopupSetWallet(props) {
     const handleClear = () => {
         setWalletAddr("")
         props.clearWallet()
+        props.onClose()
+    }
+
+    const handleSet = () => {
+        props.setWallet(walletAddr)
+        props.onClose()
     }
     
   return (
     <Dialog
-    open={props.open}
+    open={true}
     onClose={props.onClose}
     aria-labelledby="alert-dialog-title"
     aria-describedby="alert-dialog-description"
@@ -81,7 +84,7 @@ export default function PopupSetWallet(props) {
                     <Button
                         color="primary"
                         className={classes.buttons}
-                        onClick={() => props.setWallet(walletAddr)}
+                        onClick={handleSet}
                     >
                         Set
                     </Button>
@@ -100,3 +103,16 @@ export default function PopupSetWallet(props) {
     </Dialog>
   );
 }
+
+const mapStateToProps = (state) => ({
+    walletAddr: state.walletAddr
+})
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setWallet: (walletAddr) => dispatch(setAddress(walletAddr)),
+        clearWallet: () => dispatch(clearAddress())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PopupSetWallet)

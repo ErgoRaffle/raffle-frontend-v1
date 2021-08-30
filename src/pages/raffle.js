@@ -25,6 +25,7 @@ import {CircularProgress, FormControlLabel} from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
 import Box from "@material-ui/core/Box";
 import Tickets from "../components/tickets";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Raffle() {
+function Raffle(props) {
     let { id } = useParams();
     const classes = useStyles();
 
@@ -107,7 +108,7 @@ export default function Raffle() {
     const [snakbarMessage, setSnakbarMessage] = React.useState("There was a problem connecting to the server");
     const [formValues, setValues] = React.useState({
         "id": id,
-        "walletAddr": ""
+        "walletAddr": props.walletAddr
     })
     const [connecting, setConnecting] = React.useState(true);
     const [pageState, setPageState] = React.useState("Connecting to server");
@@ -128,19 +129,27 @@ export default function Raffle() {
 
     /* Get raffle data from back-end */
     React.useEffect(() => {
-        const walletAddress = localStorage.getItem('walletAddr')
-        if (walletAddress !== null) setValues((prevState) => ({
-            ...prevState,
-            "walletAddr": walletAddress
-        }))
-
         getRaffleInfo(id)
     }, [id]);
 
+    React.useEffect(() => {
+        setValues((prevState) => ({
+            ...prevState,
+            walletAddr: props.walletAddr
+        }))
+        if (validateBase58(props.walletAddr) || props.walletAddr === "") setWalletAddrValidation({
+            "error": false,
+            "text": ""
+        })
+        else setWalletAddrValidation({
+            "error": true,
+            "text": "should be Base58"
+        })
+    }, [props.walletAddr]);
+
     const getTickets = (id) => {
-        const walletAddress = localStorage.getItem('walletAddr')
-        if (walletAddress !== "") axios.post(`${baseUrl}tickets`, {
-            "walletAddr": walletAddress,
+        if (props.walletAddr !== "") axios.post(`${baseUrl}tickets`, {
+            "walletAddr": props.walletAddr,
             "raffleId": id
         })
             .then(res => {
@@ -469,7 +478,7 @@ export default function Raffle() {
                                                         name="walletAddr"
                                                         required
                                                         onChange = {handleChange}
-                                                        value={formValues.walletAddr}
+                                                        value={props.walletAddr}
                                                         error={walletAddrValidation.error}
                                                         helperText={walletAddrValidation.text}
                                                     />
@@ -604,3 +613,9 @@ export default function Raffle() {
             <Footer />
         </React.Fragment>)
 }
+
+const mapStateToProps = (state) => ({
+    walletAddr: state.walletAddr
+})
+
+export default connect(mapStateToProps)(Raffle)

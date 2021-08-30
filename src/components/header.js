@@ -9,6 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import PopupSetWallet from '../components/popupSetWallet';
 import {Box, IconButton, Menu, MenuItem} from "@material-ui/core";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -32,16 +33,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Header(props) {
+function Header(props) {
     const classes = useStyles();
-    const [walletAddr, setWalletAddr] = React.useState("")
     const [walletFeedback, setWalletFeedback] = React.useState(false)
     const [menuAnchor, setMenuAnchor] = React.useState(null);
-
-    React.useEffect(() => {
-        const walletAddress = localStorage.getItem('walletAddr')
-        if (walletAddress !== null) setWalletAddr(walletAddress)
-    }, [])
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -56,16 +51,6 @@ export default function Header(props) {
         }
         setMenuAnchor(null);
     };
-
-    const handleSet = (e) => {
-        setWalletAddr(e)
-        localStorage.setItem('walletAddr', e)
-    }
-
-    const handleClear = (e) => {
-        setWalletAddr("")
-        localStorage.setItem('walletAddr', "")
-    }
 
     return (
       <AppBar position="relative">
@@ -139,16 +124,19 @@ export default function Header(props) {
                 variant="contained"
                 onClick={() => {setWalletFeedback(true)}}
             >
-                {(walletAddr) ? `Wallet: ${walletAddr.substring(0, 3)}...${walletAddr.substring(walletAddr.length-3)}` : "Set Wallet"}
+                {(props.walletAddr) ? `Wallet: ${props.walletAddr.substring(0, 3)}...${props.walletAddr.substring(props.walletAddr.length-3)}` : "Set Wallet"}
             </Button>
-            <PopupSetWallet
-                open={walletFeedback}
+            {(walletFeedback) ? (<PopupSetWallet
                 onClose={handleClose}
-                setWallet={handleSet}
-                clearWallet={handleClear}
-                walletAddress={walletAddr}
-          />
+            />) : null}
         </Toolbar>
       </AppBar>
     )
 }
+
+const mapStateToProps = (state) => ({
+    walletAddr: state.walletAddr
+})
+
+export default connect(mapStateToProps)(Header)
+
