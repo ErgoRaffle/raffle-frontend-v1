@@ -12,22 +12,27 @@ import Footer from '../components/footer';
 import EmptyCard from '../components/emptyCard';
 import ProgressCard from '../components/progressCard';
 import { baseUrl } from '../config/server';
+import Card from "@material-ui/core/Card";
+import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  warningIcon: {
-      fontSize: 100,
-      color: "rgba(0, 0, 0, 0.1)"
-  },
-  main: {
-      minHeight: "calc(100vh - 148px)"
-  },
-  cardContainer: {
-      marginBottom: 20
-  }
+    cardGrid: {
+        paddingTop: theme.spacing(8),
+        paddingBottom: theme.spacing(8),
+    },
+    warningIcon: {
+        fontSize: 100,
+        color: "rgba(0, 0, 0, 0.1)"
+    },
+    main: {
+        minHeight: "calc(100vh - 148px)"
+    },
+    cardContainer: {
+        marginBottom: 20
+    },
+    testnetBox: {
+        marginBottom: theme.spacing(2)
+    }
 }));
 
 export default function Home() {
@@ -35,8 +40,9 @@ export default function Home() {
   const [raffles, setRaffles] = React.useState([]);
   const [connecting, setConnecting] = React.useState(true);
   const [pageState, setPageState] = React.useState("Connecting to server");
-  const [moreRaffles, setMoreRaffles] = React.useState(false);
+  const [moreRaffles, setMoreRaffles] = React.useState(true);
   const [rafflesOffset, setOffset] = React.useState(0);
+  const [currentHeight, setCurrentHeight] = React.useState(0)
   
     /* Get list of raffles from back-end */
     React.useEffect(() => {
@@ -50,12 +56,13 @@ export default function Home() {
             const response = res.data
             const newRaffles = raffles.concat(response.items)
             setRaffles(newRaffles)
-            setOffset(Math.min(response.total, newRaffles.length))
+            setCurrentHeight(response.currentHeight)
+            setOffset(newRaffles.length)
             setConnecting(false)
             
-            if (newRaffles.length < response.total)
+            if (response.total < 9)
             {
-                setMoreRaffles(true)
+                setMoreRaffles(false)
             }
             if (newRaffles.length)
             {
@@ -66,7 +73,7 @@ export default function Home() {
                 setPageState("There are no raffle running")
             }
         })
-        .catch(res => {
+        .catch(error => {
             setConnecting(false)
             setPageState("There was a problem connecting to the server")
         })
@@ -82,18 +89,20 @@ export default function Home() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header 
-        buttonLink="create"
-        buttonText="Create Raffle"
-      />
+      <Header />
       <main className={classes.main}>
         <Container className={classes.cardGrid} maxWidth="lg">
+          <Card variant="outlined" className={classes.testnetBox}>
+              <Alert severity="warning">
+                  You are using the Beta release. It's generally safe to use the raffle at this stage, but be sure that you understand the risks that come with it. Therefore, do not use it for mission critical campaigns and do not donate more than what you can afford to lose.
+              </Alert>
+          </Card>
           {raffles && (
             <Grid container className={classes.cardContainer} spacing={4}>
                 <BottomScrollListener onBottom={checkEndOfRaffles}>
                     {raffles.map((raffle, ind) => (
                     <Grid item key={ind} xs={12} sm={6} md={4} lg={4}>
-                        <RaffleCard raffle={raffle} />
+                        <RaffleCard raffle={raffle} currentHeight={currentHeight}/>
                     </Grid>
                     ))}
                 </BottomScrollListener>
@@ -102,6 +111,7 @@ export default function Home() {
           {!raffles.length && !connecting && (
             <EmptyCard 
                 text={pageState}
+                retry={getRaffles}
             />
           )}
           {connecting && (
