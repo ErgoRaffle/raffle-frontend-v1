@@ -120,12 +120,6 @@ function Raffle(props) {
         "error": false,
         "text": ""
     })
-    const [tickets, setTickets] = React.useState([]);
-    const [ticketsCounts, setTicketsCounts] = React.useState({
-        "totalTickets": 0,
-        "total": 0
-    })
-    const [ticketMessage, setTicketMessage] = React.useState("");
 
     /* Get raffle data from back-end */
     React.useEffect(() => {
@@ -147,37 +141,6 @@ function Raffle(props) {
         })
     }, [props.walletAddr]);
 
-    const getTickets = (id) => {
-        if (props.walletAddr !== "") axios.post(`${baseUrl}tickets`, {
-            "walletAddr": props.walletAddr,
-            "raffleId": id
-        })
-            .then(res => {
-                const response = res.data;
-                setTickets(response.items)
-                setTicketsCounts({
-                    "totalTickets": response.totalTickets,
-                    "total": response.total
-                })
-                setTicketMessage("You have no tickets in this raffle")
-            })
-            .catch(error => {
-                const response = error.response
-                setTickets([])
-                setTicketsCounts({
-                    "totalTickets": 0,
-                    "total": 0
-                })
-                if (response.status === 400) setTicketMessage(response.data.message)
-                else setTicketMessage("There was a problem connecting to the server")
-            })
-        else
-        {
-            setTickets([])
-            setTicketMessage("Set your wallet address to see your tickets")
-        }
-    }
-
     const getRaffleInfo = (id) => {
         setConnecting(true)
         axios.get(`${baseUrl}raffle/${id}`)
@@ -196,8 +159,6 @@ function Raffle(props) {
                 if (response.status === 400) setPageState("There is no data about this raffle")
                 else setPageState("There was a problem connecting to the server")
             })
-
-        getTickets(id)
     }
 
     const validateBase58 = (address) => {
@@ -450,11 +411,7 @@ function Raffle(props) {
                         </Grid>
                         <Grid item key="tickets" xs={12}>
                             <Tickets
-                                tickets={tickets}
-                                totalTickets={ticketsCounts.totalTickets}
-                                total={ticketsCounts.total}
-                                getTickets={() => getTickets(id)}
-                                message={ticketMessage}
+                                id={id}
                                 onError={popError}
                             />
                         </Grid>
