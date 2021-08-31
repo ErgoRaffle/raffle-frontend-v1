@@ -11,6 +11,7 @@ import Box from "@material-ui/core/Box";
 import ReportProblemRoundedIcon from "@material-ui/icons/ReportProblemRounded";
 import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 import axios from "axios";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -34,9 +35,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Tickets(props) {
+function Tickets(props) {
     const classes = useStyles();
     const [explorer, setExplorer] = React.useState("")
+    const [tickets, setTickets] = React.useState([]);
+    const [ticketsCounts, setTicketsCounts] = React.useState({
+        "totalTickets": 0,
+        "total": 0
+    })
+    const [ticketMessage, setTicketMessage] = React.useState("");
 
     React.useEffect(() => {
         if (explorer === "")
@@ -50,7 +57,48 @@ export default function Tickets(props) {
                     props.onError("There was a problem connecting to the server")
                 })
         }
+
+        getTickets(props.id)
     }, [explorer]);
+
+    React.useEffect(() => {
+        getTickets(props.id)
+    }, [props.walletAddr]);
+
+    const getTickets = (id) => {
+        if (props.walletAddr !== "") axios.post(`${baseUrl}tickets`, {
+            "walletAddr": props.walletAddr,
+            "raffleId": id
+        })
+            .then(res => {
+                const response = res.data;
+                setTickets(response.items)
+                setTicketsCounts({
+                    "totalTickets": response.totalTickets,
+                    "total": response.total
+                })
+                setTicketMessage("You have no tickets in this raffle")
+            })
+            .catch(error => {
+                const response = error.response
+                setTickets([])
+                setTicketsCounts({
+                    "totalTickets": 0,
+                    "total": 0
+                })
+                if (response.status === 400) setTicketMessage(response.data.message)
+                else setTicketMessage("There was a problem connecting to the server")
+            })
+        else
+        {
+            setTickets([])
+            setTicketsCounts({
+                "totalTickets": 0,
+                "total": 0
+            })
+            setTicketMessage("Set your wallet address to see your tickets")
+        }
+    }
 
     return (
         <Card className={classes.card}>
@@ -58,9 +106,9 @@ export default function Tickets(props) {
                 <Typography gutterBottom variant="h5" color="primary" component="h2">
                     Your Tickets
                 </Typography>
-                {props.total > 0 && (<div>
+                {(ticketsCounts.total > 0) ? (<div>
                         <Typography component="p" variant="h6">
-                            You have <b>{props.totalTickets}</b> {(props.totalTickets) === 1 ? `ticket` : `tickets`}
+                            You have <b>{ticketsCounts.totalTickets}</b> {(ticketsCounts.totalTickets) === 1 ? `ticket` : `tickets`}
                         </Typography>
                         <Table>
                             <TableHead>
@@ -70,10 +118,10 @@ export default function Tickets(props) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {props.tickets.map((ticket, ind) => (
+                                {tickets.map((ticket, ind) => (
                                     <TableRow key={ind}>
                                         <TableCell>
-                                            <a target="_blank" href={`${explorer}en/transactions/${ticket.txId}`} className={classes.links}>
+                                            <a target="_blank" href={`${explorer}/en/transactions/${ticket.txId}`} className={classes.links}>
                                                 {ticket.txId}
                                             </a>
                                         </TableCell>
@@ -83,28 +131,35 @@ export default function Tickets(props) {
                             </TableBody>
                         </Table>
                     </div>
-                )}
-                {!props.total && (
+                ) : null}
+                {(ticketsCounts.total === 0) ? (
                     <Box p={2}>
                         <Box align="center">
                             <ReportProblemRoundedIcon className={classes.warningIcon}/>
                         </Box>
                         <Typography align="center" color="textSecondary">
-                            {props.message}
+                            {ticketMessage}
                         </Typography>
                         <div align="center">
                             <Button
                                 type="submit"
                                 variant="contained"
-                                onClick={props.getTickets}
+                                onClick={getTickets}
                                 className={classes.submit}
                             >
                                 Retry
                             </Button>
                         </div>
                     </Box>
-                )}
+                ) : null}
             </CardContent>
         </Card>
     )
 }
+
+const mapStateToProps = (state) => ({
+    walletAddr: state.walletAddr
+})
+
+export default connect(mapStateToProps)(Tickets)
+
