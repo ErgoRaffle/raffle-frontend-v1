@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     borderRadius: 16,
-    border: "4px solid #C4C4C4",
+    border: "1px solid #C4C4C4",
     paddingTop: 20,
     cursor: "pointer"
   },
@@ -46,6 +46,7 @@ function raffleIcon(raffleId) {
 export default function RaffleCard(props) {
     const classes = useStyles();
     const history = useHistory();
+    const [zDepth, setZDepth] = React.useState(0)
 
     const deadlineString = (deadline, currentHeight) => {
         if (deadline > currentHeight && deadline - currentHeight < 30) return `Deadline: about ${(deadline - currentHeight) * 2} minutes`
@@ -68,9 +69,18 @@ export default function RaffleCard(props) {
   
     const handleClick = () => history.push(`/raffle/${props.raffle.id}`);
 
+    const onMouseOver = () => setZDepth(6);
+
+    const onMouseOut = () => setZDepth(0);
 
     return (
-        <Card className={classes.card} elevation={0} onClick={handleClick}>
+        <Card className={classes.card} 
+        elevation={zDepth} 
+        onClick={handleClick} 
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
+        // onMouseEnter={setZDepth(1)}
+        >
           <CardContent align="center">
             <img
                 src={process.env.PUBLIC_URL + raffleIcon(props.raffle.id)}

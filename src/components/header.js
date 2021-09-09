@@ -36,8 +36,6 @@ const useStyles = makeStyles((theme) => ({
         cursor: "pointer"
     },
     menu: {
-        // float: "right",
-
         paddingRight: 25,
     },
     links: {

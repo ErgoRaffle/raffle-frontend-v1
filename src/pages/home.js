@@ -41,11 +41,9 @@ const useStyles = makeStyles((theme) => ({
     },
     subtitle: {
         paddingBottom: 12,
-        //   fontWeight: "500",
         maxWidth: 500,
-        fontWeight: "500",
+        fontWeight: "400",
         letterSpacing: "-0.8px"
-
     },
     titleContainer: {
         marginTop: theme.spacing(4),
@@ -117,7 +115,7 @@ export default function Home() {
             </Card>
             <div className={classes.titleContainer}>
                 <Typography variant="h4" component="h2" color="inherit" className={classes.title}>
-                    Raffles
+                    Browse Raffles
                 </Typography>
                 <Typography variant="h5" component="h3" color="inherit" className={classes.subtitle}>
                     People all around the world are raising money for what really matters.
