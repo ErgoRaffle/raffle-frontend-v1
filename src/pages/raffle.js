@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -11,6 +11,9 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import { useParams } from "react-router-dom";
+import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import Popup from '../components/popup';
 import DynamicRecaptcha from "../components/dynamicRecaptcha";
@@ -21,7 +24,9 @@ import EmptyCard from '../components/emptyCard';
 import ProgressCard from '../components/progressCard';
 import { baseUrl } from '../config/server';
 import {terms} from '../config/terms'
-import {CircularProgress, FormControlLabel} from "@material-ui/core";
+import {CircularProgress, FormControlLabel, } from "@material-ui/core";
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 import Checkbox from "@material-ui/core/Checkbox";
 import Box from "@material-ui/core/Box";
 import Tickets from "../components/tickets";
@@ -45,7 +50,10 @@ const useStyles = makeStyles((theme) => ({
     card: {
         height: '100%',
         display: 'flex',
+        padding: 12,
         flexDirection: 'column',
+        borderRadius: 4,
+        border: "1px solid #C4C4C4",
     },
     cardMedia: {
         paddingTop: '56.25%', // 16:9
@@ -55,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+
     },
     footer: {
         backgroundColor: theme.palette.background.paper,
@@ -96,6 +105,22 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const BorderLinearProgress = withStyles((theme) => ({
+    root: {
+      height: 23,
+      borderRadius: 13,
+      border: "1px solid black"
+    },
+    colorPrimary: {
+      backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+    },
+    bar: {
+      borderRadius: 5,
+      backgroundColor: '#FF5537',
+      
+    },
+  }))(LinearProgress);
+
 function Raffle(props) {
     let { id } = useParams();
     const classes = useStyles();
@@ -120,6 +145,14 @@ function Raffle(props) {
         "error": false,
         "text": ""
     })
+    const [copiedSnackbar, setCopiedSnackbar] = React.useState(false);
+
+    const handleCloseSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setCopiedSnackbar(false);
+    };
 
     /* Get raffle data from back-end */
     React.useEffect(() => {
@@ -273,9 +306,9 @@ function Raffle(props) {
                 <Container className={classes.cardGrid} maxWidth="lg">
                     {raffleExist && !connecting && <Grid container spacing={4}>
                         <Grid item xs={12} lg={8}>
-                            <Card className={classes.card}>
+                            <Card className={classes.card} elevation={0}>
                                 <CardContent className={classes.cardContent}>
-                                    <Typography gutterBottom variant="h5" color="primary" component="h2">
+                                    <Typography gutterBottom variant="h5" component="h2" style={{fontWeight: "500"}}>
                                         {raffle.name}
                                     </Typography>
                                     <Typography>
@@ -289,53 +322,35 @@ function Raffle(props) {
                             </Card>
                         </Grid>
                         <Grid item xs={12} lg={4}>
-                            <Card className={classes.card}>
+                            <Card className={classes.card} elevation={0}>
                                 <CardContent className={classes.cardContent}>
-                                    <Typography gutterBottom variant="h5" color="primary" component="h2">
-                                        Deposit
-                                    </Typography>
-                                    <Grid container display="inline-flex">
-                                        <Grid item x={8} className={classes.depositInfo}>
-                                            <Typography component="p" variant="h5">
-                                                Raised: {floatRound(raffle.erg / 1000000000)} ERG
-                                            </Typography>
-                                            <Typography color="textSecondary">
-                                                Donation Goal: {floatRound(raffle.min / 1000000000)} ERG
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item x={4} className={classes.depositProgress}>
-                                            <Box position="relative" display="inline-flex">
-                                                <CircularProgress
-                                                    variant="determinate"
-                                                    value={Math.min(Math.round(raffle.erg * 100 / raffle.min), 100)}
-                                                    size={80}/>
-                                                <Box
-                                                    top={0}
-                                                    left={0}
-                                                    bottom={0}
-                                                    right={0}
-                                                    position="absolute"
-                                                    display="flex"
-                                                    alignItems="center"
-                                                    justifyContent="center"
-                                                >
-                                                    <Typography
-                                                        variant="caption"
-                                                        component="div"
-                                                        color="textSecondary"
-                                                        className={classes.progress}
-                                                    >
-                                                        {`${Math.round(raffle.erg * 100 / raffle.min)}%`}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
+
+                                <Typography component="p" variant="h5" style={{fontWeight: "500"}}>
+                                    Raised: {floatRound(raffle.erg / 1000000000)} ERG
+                                </Typography>
+                                <Typography color="textSecondary">
+                                    Donation Goal: {floatRound(raffle.min / 1000000000)} ERG
+                                </Typography>
+                                <div style={{fontSize: 16, textAlign: "center", marginTop: 12}}>
+                                    <BorderLinearProgress variant="determinate" value={Math.min(Math.round(raffle.erg * 100 / raffle.min), 100)}  style={{marginBottom: 4}}/>
+                                    {`${Math.round(raffle.erg * 100 / raffle.min)}%`}
+                                </div>
+                                <CopyToClipboard text={window.location.href} onCopy={() => {setCopiedSnackbar(true)}}>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                >
+                                    Share
+                                </Button>
+        </CopyToClipboard>
+
                                 </CardContent>
                             </Card>
                         </Grid>
                         <Grid item xs={12} lg={8}>
-                            <Card className={classes.card}>
+                            <Card className={classes.card} elevation={0}>
                                 <CardContent className={classes.cardContent}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
@@ -363,7 +378,7 @@ function Raffle(props) {
                             </Card>
                         </Grid>
                         <Grid item xs={12} lg={4}>
-                            <Card className={classes.card}>
+                            <Card className={classes.card} elevation={0}>
                                 <CardContent className={classes.cardContent}>
                                     <Grid container spacing={2}>
                                         <Grid item xs={12}>
@@ -420,10 +435,10 @@ function Raffle(props) {
                             <Divider variant="middle"/>
                         </Grid>)}
                         {(raffle.deadline > raffle.currentHeight) && (<Grid item xs={12} lg={6}>
-                            <Card className={classes.card}>
+                            <Card className={classes.card} elevation={0}>
                                 <CardContent className={classes.cardContent}>
                                     <div className={classes.paper}>
-                                        <Typography gutterBottom variant="h5" color="primary" component="h2">
+                                        <Typography gutterBottom variant="h5" component="h2">
                                             Donate
                                         </Typography>
                                         <form id="donate_form" className={classes.form} onSubmit={handleDonate}>
@@ -535,10 +550,10 @@ function Raffle(props) {
                             </Card>
                         </Grid>)}
                         {(raffle.deadline > raffle.currentHeight) && (<Grid item key="termCreate" xs={12} sm={12} md={6}>
-                            <Card className={classes.card}>
+                            <Card className={classes.card} elevation={0}>
                                 <CardContent className={classes.cardContent}>
                                     <div className={classes.paper}>
-                                        <Typography component="h1" variant="h5" color="primary">
+                                        <Typography component="h1" variant="h5">
                                             Terms of use
                                         </Typography>
                                     </div>
@@ -567,6 +582,19 @@ function Raffle(props) {
                         <ProgressCard />
                     )}
                 </Container>
+                <Snackbar
+                    open={copiedSnackbar}
+                    autoHideDuration={1500}
+                    onClose={handleCloseSnack}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center'
+                    }}
+                >
+                    <MuiAlert onClose={props.onClose} severity="info">
+                        Copied Link!
+                    </MuiAlert>
+                </Snackbar>
             </main>
             <Footer />
         </React.Fragment>)

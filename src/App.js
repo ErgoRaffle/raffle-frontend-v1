@@ -6,6 +6,8 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { MuiThemeProvider } from "@material-ui/core/styles";
 
 import Home from './pages/home';
 import Raffle from './pages/raffle';
@@ -14,6 +16,23 @@ import Faq from './pages/faq';
 import {loadAddress} from "./storage/store";
 import {connect} from "react-redux";
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#FF5537"
+    }
+  },
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          backgroundColor: "#fff",
+        },
+      },
+    },
+  },
+});
+
 function App(props) {
 
   React.useEffect(() => {
@@ -21,6 +40,8 @@ function App(props) {
   }, [])
 
   return (
+    <MuiThemeProvider theme={theme}>
+
     <Router>
       <div>
         <Switch>
@@ -42,6 +63,7 @@ function App(props) {
         </Switch>
       </div>
     </Router>
+    </MuiThemeProvider>
   );
 }
 
