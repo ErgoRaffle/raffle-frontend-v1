@@ -30,8 +30,6 @@ const useStyles = makeStyles((theme) => ({
   cardDeadline: {
     padding: "8px",
     paddingTop: 12,
-    // borderTop: "1px solid #ddd",
-    // borderBottom: "1px solid #ddd"
   },
   cardTitle: {
       paddingBottom: 0,
@@ -79,7 +77,6 @@ export default function RaffleCard(props) {
         onClick={handleClick} 
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
-        // onMouseEnter={setZDepth(1)}
         >
           <CardContent align="center">
             <img

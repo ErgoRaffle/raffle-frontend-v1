@@ -41,28 +41,27 @@ function App(props) {
 
   return (
     <MuiThemeProvider theme={theme}>
-
-    <Router>
-      <div>
-        <Switch>
-          <Route exact path="/raffle/:id">
-            <Raffle />
-          </Route>
-          <Route exact path="/create">
-            <CreateRaffle />
-          </Route>
-          <Route exact path="/faq">
-            <Faq />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route>
-            <Redirect to="/"/>
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+      <Router>
+        <div>
+          <Switch>
+            <Route exact path="/raffle/:id">
+              <Raffle />
+            </Route>
+            <Route exact path="/create">
+              <CreateRaffle />
+            </Route>
+            <Route exact path="/faq">
+              <Faq />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route>
+              <Redirect to="/"/>
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     </MuiThemeProvider>
   );
 }
