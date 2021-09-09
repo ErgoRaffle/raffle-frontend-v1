@@ -124,6 +124,7 @@ function Raffle(props) {
     /* Get raffle data from back-end */
     React.useEffect(() => {
         getRaffleInfo(id)
+        window.scrollTo(0, 0);
     }, [id]);
 
     React.useEffect(() => {

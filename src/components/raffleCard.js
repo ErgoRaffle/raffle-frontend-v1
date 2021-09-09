@@ -1,6 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -18,17 +18,23 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    borderRadius: 16,
+    border: "4px solid #C4C4C4",
+    paddingTop: 20,
+    cursor: "pointer"
   },
   cardContent: {
     flexGrow: 1,
+    paddingTop: 0
   },
   cardDeadline: {
     padding: "8px",
-    borderTop: "1px solid #ddd",
-    borderBottom: "1px solid #ddd"
+    paddingTop: 12,
+    // borderTop: "1px solid #ddd",
+    // borderBottom: "1px solid #ddd"
   },
   cardTitle: {
-      paddingBottom: 0
+      paddingBottom: 0,
   },
 }));
 
@@ -39,6 +45,7 @@ function raffleIcon(raffleId) {
 
 export default function RaffleCard(props) {
     const classes = useStyles();
+    const history = useHistory();
 
     const deadlineString = (deadline, currentHeight) => {
         if (deadline > currentHeight && deadline - currentHeight < 30) return `Deadline: about ${(deadline - currentHeight) * 2} minutes`
@@ -59,13 +66,11 @@ export default function RaffleCard(props) {
         else return description.split("\n")
     }
   
+    const handleClick = () => history.push(`/raffle/${props.raffle.id}`);
+
+
     return (
-        <Card className={classes.card}>
-          <CardContent className={classes.cardTitle}>
-            <Typography gutterBottom variant="h5" color="primary" component="h2">
-                {props.raffle.name}
-            </Typography>
-          </CardContent>
+        <Card className={classes.card} elevation={0} onClick={handleClick}>
           <CardContent align="center">
             <img
                 src={process.env.PUBLIC_URL + raffleIcon(props.raffle.id)}
@@ -73,6 +78,11 @@ export default function RaffleCard(props) {
                 width={200}
                 alt="Raffle"
             />
+          </CardContent>
+          <CardContent className={classes.cardTitle}>
+            <Typography gutterBottom variant="h5" color="black" component="h2" style={{fontWeight: "700"}}>
+                {props.raffle.name}
+            </Typography>
           </CardContent>
           <CardContent className={classes.cardContent}>
             <Typography>
@@ -88,16 +98,6 @@ export default function RaffleCard(props) {
                 {deadlineString(props.raffle.deadline, props.currentHeight)}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Link to={`/raffle/${props.raffle.id}`}>
-            <Button 
-                type="submit"
-                color="primary"
-            >
-                More info
-            </Button>
-            </Link>
-          </CardActions>
         </Card>
     )
 }
