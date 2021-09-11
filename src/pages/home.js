@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { BottomScrollListener } from 'react-bottom-scroll-listener';
+import Typography from '@material-ui/core/Typography';
 
 import Header from '../components/header';
 import RaffleCard from '../components/raffleCard';
@@ -17,8 +18,8 @@ import {Alert} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8),
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
     },
     warningIcon: {
         fontSize: 100,
@@ -31,6 +32,21 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 20
     },
     testnetBox: {
+        marginBottom: theme.spacing(2)
+    },
+    title: {
+      paddingBottom: 12,
+      fontWeight: "700",
+      letterSpacing: "-0.8px"
+    },
+    subtitle: {
+        paddingBottom: 12,
+        maxWidth: 500,
+        fontWeight: "400",
+        letterSpacing: "-0.8px"
+    },
+    titleContainer: {
+        marginTop: theme.spacing(4),
         marginBottom: theme.spacing(2)
     }
 }));
@@ -96,7 +112,15 @@ export default function Home() {
               <Alert severity="warning">
                   You are using the Beta release. It's generally safe to use the raffle at this stage, but be sure that you understand the risks that come with it. Therefore, do not use it for mission critical campaigns and do not donate more than what you can afford to lose.
               </Alert>
-          </Card>
+            </Card>
+            <div className={classes.titleContainer}>
+                <Typography variant="h4" component="h2" color="inherit" className={classes.title}>
+                    Browse Raffles
+                </Typography>
+                <Typography variant="h5" component="h3" color="inherit" className={classes.subtitle}>
+                    People all around the world are raising money for what really matters.
+                </Typography>
+            </div>
           {raffles && (
             <Grid container className={classes.cardContainer} spacing={4}>
                 <BottomScrollListener onBottom={checkEndOfRaffles}>

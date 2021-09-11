@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
+        border: "1px solid #C4C4C4",
+        borderRadius: 4,
+
     },
     cardContent: {
         flexGrow: 1,
@@ -101,9 +104,9 @@ function Tickets(props) {
     }
 
     return (
-        <Card className={classes.card}>
+        <Card className={classes.card} elevation={0}>
             <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h5" color="primary" component="h2">
+                <Typography gutterBottom variant="h5" component="h2">
                     Your Tickets
                 </Typography>
                 {(ticketsCounts.total > 0) ? (<div>

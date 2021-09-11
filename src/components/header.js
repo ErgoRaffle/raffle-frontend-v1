@@ -2,7 +2,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import React from "react";
 import MenuIcon from '@material-ui/icons/Menu';
@@ -13,14 +13,27 @@ import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     title: {
-        marginTop: 5,
+        marginTop: 0,
         paddingRight: 20,
+        fontSize: 28,
+        fontWeight: "700",
+        marginBottom: "-8px",
+        cursor: "pointer"
+    },
+    subtitle: {
+        fontSize: 14,
+        textTransform: "lowercase",
+        cursor: "pointer"
+
     },
     lastLeftSide: {
         flexGrow: 1,
     },
     logo: {
         marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        cursor: "pointer"
     },
     menu: {
         paddingRight: 25,
@@ -29,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: "none",
     },
     typo: {
-        color: "white"
+        color: "black"
     }
 }));
 
@@ -37,6 +50,7 @@ function Header(props) {
     const classes = useStyles();
     const [walletFeedback, setWalletFeedback] = React.useState(false)
     const [menuAnchor, setMenuAnchor] = React.useState(null);
+    const history = useHistory();
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -52,19 +66,27 @@ function Header(props) {
         setMenuAnchor(null);
     };
 
+    const handleLogo = () => history.push('/');
+
     return (
-      <AppBar position="relative">
+      <AppBar color="transparent" position="relative" elevation={1}>
         <Toolbar>
           <img
             className={classes.logo}
-            src={process.env.PUBLIC_URL + '/logo_white.png'}
-            height={45}
-            width={45}
+            src={process.env.PUBLIC_URL + '/logo_black.png'}
+            height={54}
+            width={54}
             alt="Ergo logo"
+            onClick={handleLogo}
           />
-          <Typography variant="h5" color="inherit" className={classes.title}>
-            ERGO RAFFLE
-          </Typography>
+          <div onClick={handleLogo}>
+            <Typography variant="body1" color="inherit" className={classes.title}>
+                ERGO
+            </Typography>
+            <Typography variant="body1" color="inherit" className={classes.subtitle}>
+                RAFFLE
+            </Typography>
+          </div>
             <Box className={classes.menu} display={{xs: "block", md: "none"}}>
                 <IconButton
                     aria-label="menu"
